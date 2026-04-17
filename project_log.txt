@@ -39,14 +39,12 @@ relative L2 error and inference speed.
   - data/nsforcing_test_128.pt  — test set (251 MB)
 - Data files excluded from git via .gitignore (too large for GitHub)
 
-### Environment Setup (IN PROGRESS — may need to resume)
+### Environment Setup (COMPLETE)
 - Installed uv package manager to ~/.local/bin/uv
-- Initialized uv project (pyproject.toml created)
+- Initialized uv project (pyproject.toml + uv.lock created)
 - Pinned Python 3.13
-- Started installing dependencies: torch, torchvision, h5py, numpy, matplotlib, tqdm, wandb
-- If interrupted, resume with:
-    cd "Deep Learning Projects/COMP395-Final-Group-Project"
-    ~/.local/bin/uv add torch torchvision h5py numpy matplotlib tqdm wandb
+- Installed dependencies: torch 2.11.0+cu130, numpy 2.4.4, torchvision, h5py, matplotlib, tqdm, wandb
+- To recreate environment from scratch: ~/.local/bin/uv sync
 
 ---
 
