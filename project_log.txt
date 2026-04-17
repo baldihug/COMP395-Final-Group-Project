@@ -1,0 +1,49 @@
+COMP 395 Final Project Log
+===========================
+Project: FNO vs U-Net on 2D Incompressible Navier-Stokes
+Course: COMP 395 — Deep Learning
+Date Started: 2026-04-17
+
+---
+
+## Goal
+Compare the Fourier Neural Operator (FNO) and a U-Net (CNN baseline) on predicting
+the time evolution of 2D incompressible Navier-Stokes equations. Evaluation metrics:
+relative L2 error and inference speed.
+
+---
+
+## Session 1 — 2026-04-17
+
+### Repository Setup
+- Cloned group repo from: https://github.com/baldihug/COMP395-Final-Group-Project
+- Created personal working branch: `ianh`
+- Pushed branch to origin for backup
+
+### Dataset Decision
+- Evaluated Li et al. (2021) FNO Google Drive dataset — file access unclear/deprecated
+- Evaluated PDEBench (doi:10.18419/darus-2986) — full NS dataset is 2.3 TB (274 files
+  at ~8 GB each, 512x512 resolution), not practical for a course project
+- Selected: neuraloperator Zenodo dataset (doi:10.5281/zenodo.12825163)
+  - File: nsforcing_128.tgz (~1.5 GB)
+  - Resolution: 128x128
+  - Source: https://zenodo.org/records/12825163
+  - Format: PyTorch .pt tensors (vorticity fields)
+  - Rationale: manageable size, standard benchmark resolution, directly citable,
+    matches resolution used in Li et al. FNO paper experiments
+
+### Dataset Download
+- Downloaded nsforcing_128.tgz to data/ directory
+- Extracted to data/nsforcing_128/
+  - nsforcing_train_128.pt — training set
+  - nsforcing_test_128.pt  — test set
+
+---
+
+## Next Steps
+- Set up uv-managed Python environment with dependencies
+- Implement FNO model (PyTorch)
+- Implement U-Net baseline (PyTorch)
+- Set up experiment tracking (MLflow or Weights & Biases)
+- Write training and evaluation scripts
+- Run experiments and log results
