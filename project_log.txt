@@ -34,16 +34,34 @@ relative L2 error and inference speed.
 
 ### Dataset Download
 - Downloaded nsforcing_128.tgz to data/ directory
-- Extracted to data/nsforcing_128/
-  - nsforcing_train_128.pt — training set
-  - nsforcing_test_128.pt  — test set
+- Extracted contents:
+  - data/nsforcing_train_128.pt — training set (1.3 GB)
+  - data/nsforcing_test_128.pt  — test set (251 MB)
+- Data files excluded from git via .gitignore (too large for GitHub)
+
+### Environment Setup (IN PROGRESS — may need to resume)
+- Installed uv package manager to ~/.local/bin/uv
+- Initialized uv project (pyproject.toml created)
+- Pinned Python 3.13
+- Started installing dependencies: torch, torchvision, h5py, numpy, matplotlib, tqdm, wandb
+- If interrupted, resume with:
+    cd "Deep Learning Projects/COMP395-Final-Group-Project"
+    ~/.local/bin/uv add torch torchvision h5py numpy matplotlib tqdm wandb
+
+---
+
+## Resuming This Project (give this file to Claude)
+1. Open terminal in: ~/Deep Learning Projects/COMP395-Final-Group-Project
+2. Run: git checkout ianh
+3. If environment not set up: ~/.local/bin/uv add torch torchvision h5py numpy matplotlib tqdm wandb
+4. Pick up from Next Steps below
 
 ---
 
 ## Next Steps
-- Set up uv-managed Python environment with dependencies
+- Finish uv environment setup
 - Implement FNO model (PyTorch)
 - Implement U-Net baseline (PyTorch)
-- Set up experiment tracking (MLflow or Weights & Biases)
+- Set up experiment tracking (Weights & Biases)
 - Write training and evaluation scripts
 - Run experiments and log results
