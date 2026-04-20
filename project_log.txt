@@ -78,6 +78,21 @@ relative L2 error and inference speed.
 - Both models forward/backward pass correctly on CPU
 - FNO: ~4.7M params | U-Net: ~31M params
 
+### Presentation
+- presentation.html: reveal.js slideshow, opens directly in any browser
+- 15 slides covering:
+  - Fluid dynamics intro (high school level)
+  - What is a PDE and the Navier-Stokes equations
+  - Why NS is hard to solve numerically
+  - Neural operators and how FNO works
+  - FNO vs U-Net architecture comparison
+  - Dataset, training setup
+  - Results table (TBD — fill in after training)
+  - Zero-shot super-resolution table (TBD — fill in after training)
+  - Conclusion and references
+- To open: double-click presentation.html in file explorer, or open in browser directly
+- Navigate with arrow keys; slide number shown bottom-right
+
 ### Dataset Visualization
 - visualize_data.py: generates 3 figures saved to figures/
   - figures/sample_pairs.png: 5 examples of input/target pairs. Top row = input
@@ -163,6 +178,13 @@ relative L2 error and inference speed.
   ground truth is bilinearly upsampled from 128x128. This is a proxy for real
   super-resolution but is the standard approach when only one resolution is available.
   Mention this limitation in the writeup.
+
+### Step 5 — Fill in presentation results
+  Open presentation.html in a browser (no server needed — loads from CDN).
+  After running Steps 2-4, fill in the TBD cells in two slides:
+  - Slide 12 "Results — Accuracy & Speed": rel-L2, throughput, latency for both models
+  - Slide 13 "Zero-Shot Super-Resolution": rel-L2 at 64x64, 128x128, 256x256 for both models
+  Also replace the placeholder image on the Dataset slide with figures/sample_pairs.png.
 
 ### Step 6 — Write up results
   Compare FNO vs U-Net on:
