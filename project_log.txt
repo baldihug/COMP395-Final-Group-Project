@@ -96,9 +96,30 @@ relative L2 error and inference speed.
 ---
 
 ## Next Steps
-- (Optional) Add target normalization to train.py to stabilize loss scale
-- Log in to W&B: wandb login
-- Run FNO training: uv run python train.py --model fno --epochs 100
-- Run U-Net training: uv run python train.py --model unet --epochs 100
-- Run evaluation: uv run python evaluate.py --model fno --checkpoint checkpoints/fno_best.pt
-- Compare results and write up
+
+### Step 1 — Start the MLflow UI (optional but recommended)
+  ~/.local/bin/uv run mlflow ui
+  Opens dashboard at http://localhost:5000 — shows live loss curves and run comparison.
+  MLflow runs locally, no account or API key needed.
+
+### Step 2 — Train FNO
+  ~/.local/bin/uv run python train.py --model fno --epochs 100
+  - Evaluates on test set every 5 epochs
+  - Saves best checkpoint to checkpoints/fno_best.pt
+  - Logs train/test rel-L2 to MLflow experiment: comp395-ns-benchmark
+
+### Step 3 — Train U-Net
+  ~/.local/bin/uv run python train.py --model unet --epochs 100
+  - Same setup, saves to checkpoints/unet_best.pt
+
+### Step 4 — Evaluate both models
+  ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt
+  ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt
+  - Reports: test rel-L2, throughput (samples/sec), latency (ms/sample)
+  - These numbers are the core comparison for the writeup
+
+### Notes
+  - Training on CPU will be very slow (hours); GPU recommended
+  - PyTorch auto-detects GPU — no code changes needed
+  - (Optional) Add target normalization to train.py first to stabilize loss scale
+    (targets have ~20x wider variance than inputs)
