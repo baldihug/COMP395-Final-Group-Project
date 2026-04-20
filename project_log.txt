@@ -132,7 +132,7 @@ relative L2 error and inference speed.
   per epoch despite being a simpler architecture.
   Expected time on RTX 2060: roughly 30-60 minutes for 100 epochs
 
-### Step 4 — Evaluate both models
+### Step 4 — Standard evaluation (accuracy + speed)
   ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt
   ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt
 
@@ -143,7 +143,28 @@ relative L2 error and inference speed.
   - Latency: average ms per sample
   These three numbers are the core quantitative comparison for the writeup.
 
-### Step 5 — Write up results
+### Step 5 — Zero-shot super-resolution evaluation (required by project spec)
+  ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt  --super_res
+  ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt --super_res
+
+  What this does:
+  - Both models were trained exclusively on 128x128 data
+  - This test resizes the test inputs and targets to 64x64, 128x128, and 256x256
+    using bilinear interpolation, then runs each through the trained model
+  - Reports rel-L2 at each resolution — shows how accuracy degrades away from
+    the training resolution
+  Why FNO is expected to win here:
+  - FNO operates in Fourier space, which is resolution-agnostic by design.
+    The spectral convolution truncates to 12 modes regardless of input size,
+    so the model generalises naturally to unseen resolutions.
+  - U-Net uses fixed convolutional kernels and pooling tied to spatial structure,
+    so it has no principled reason to generalise to new resolutions.
+  Note on methodology: we don't have true 256x256 simulation data, so the 256x256
+  ground truth is bilinearly upsampled from 128x128. This is a proxy for real
+  super-resolution but is the standard approach when only one resolution is available.
+  Mention this limitation in the writeup.
+
+### Step 6 — Write up results
   Compare FNO vs U-Net on:
   - Accuracy: which model achieves lower test rel-L2?
   - Efficiency: which model is faster at inference? (FNO likely wins — fewer params)
