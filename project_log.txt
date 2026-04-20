@@ -56,10 +56,28 @@ relative L2 error and inference speed.
 
 ---
 
+---
+
+## Session 2 — 2026-04-20
+
+### Models Implemented
+- dataset.py: NSForcingDataset wrapping the .pt files (x→y vorticity pairs)
+- models/fno.py: FNO2d — 4 Fourier layers, modes=12, width=64, ~4.7M params
+  - Input augmented with 2D grid coords (x: 3 channels = vorticity + gx + gy)
+  - SpectralConv2d truncates to top-12 modes in each dim
+- models/unet.py: UNet — 4-level encoder-decoder with skip connections, ~31M params
+- train.py: training loop with relative L2 loss, cosine LR, W&B logging
+- evaluate.py: reports rel-L2 and inference throughput (samples/sec)
+
+### Verified
+- Both models forward/backward pass correctly on CPU
+- FNO: ~4.7M params | U-Net: ~31M params
+
+---
+
 ## Next Steps
-- Finish uv environment setup
-- Implement FNO model (PyTorch)
-- Implement U-Net baseline (PyTorch)
-- Set up experiment tracking (Weights & Biases)
-- Write training and evaluation scripts
-- Run experiments and log results
+- Log in to W&B: wandb login
+- Run FNO training: uv run python train.py --model fno --epochs 100
+- Run U-Net training: uv run python train.py --model unet --epochs 100
+- Run evaluation: uv run python evaluate.py --model fno --checkpoint checkpoints/fno_best.pt
+- Compare results and write up
