@@ -73,9 +73,30 @@ relative L2 error and inference speed.
 - Both models forward/backward pass correctly on CPU
 - FNO: ~4.7M params | U-Net: ~31M params
 
+### Dataset Visualization
+- visualize_data.py: generates 3 figures saved to figures/
+  - figures/sample_pairs.png: 5 examples of input/target pairs. Top row = input
+    vorticity fed to the model; bottom row = target it must predict. Shows overall
+    data structure.
+  - figures/sample_diffs.png: target − input for each sample. Isolates the change
+    the model must learn. Diffs are large and structured (not noise), so the model
+    cannot just copy the input.
+  - figures/stats.png: two summary plots over the full training set:
+    - Histogram: input values (blue) are tightly centered; target values (orange)
+      spread much wider (~20x more variable).
+    - Per-sample std scatter: nearly diagonal — more energetic inputs produce more
+      energetic targets. Dataset is consistent and well-behaved.
+- Key observations:
+  - Inputs are smooth, low-amplitude (std ≈ 0.15, range ≈ ±1.5)
+  - Targets are more turbulent, much higher amplitude (range ≈ ±4)
+  - Differences are large and structured — model must learn real dynamics
+  - Per-sample std is nearly linear: more energetic inputs → more energetic targets
+  - Target variance is ~20x wider than input variance; consider normalizing targets
+
 ---
 
 ## Next Steps
+- (Optional) Add target normalization to train.py to stabilize loss scale
 - Log in to W&B: wandb login
 - Run FNO training: uv run python train.py --model fno --epochs 100
 - Run U-Net training: uv run python train.py --model unet --epochs 100
