@@ -43,15 +43,20 @@ relative L2 error and inference speed.
 - Installed uv package manager to ~/.local/bin/uv
 - Initialized uv project (pyproject.toml + uv.lock created)
 - Pinned Python 3.13
-- Installed dependencies: torch 2.11.0+cu130, numpy 2.4.4, torchvision, h5py, matplotlib, tqdm, wandb
+- Installed dependencies: torch 2.11.0+cu130, numpy 2.4.4, torchvision, h5py, matplotlib, tqdm, mlflow
 - To recreate environment from scratch: ~/.local/bin/uv sync
+
+### Hardware
+- GPU: NVIDIA GeForce RTX 2060 (6 GB VRAM), confirmed working via nvidia-smi
+- CUDA 13.2, Driver 595.97
+- PyTorch auto-detects the GPU at runtime — no code changes needed
 
 ---
 
 ## Resuming This Project (give this file to Claude)
 1. Open terminal in: ~/Deep Learning Projects/COMP395-Final-Group-Project
 2. Run: git checkout ianh
-3. If environment not set up: ~/.local/bin/uv add torch torchvision h5py numpy matplotlib tqdm wandb
+3. If environment not set up: ~/.local/bin/uv sync
 4. Pick up from Next Steps below
 
 ---
@@ -66,7 +71,7 @@ relative L2 error and inference speed.
   - Input augmented with 2D grid coords (x: 3 channels = vorticity + gx + gy)
   - SpectralConv2d truncates to top-12 modes in each dim
 - models/unet.py: UNet — 4-level encoder-decoder with skip connections, ~31M params
-- train.py: training loop with relative L2 loss, cosine LR, W&B logging
+- train.py: training loop with relative L2 loss, cosine LR, MLflow logging
 - evaluate.py: reports rel-L2 and inference throughput (samples/sec)
 
 ### Verified
@@ -98,28 +103,57 @@ relative L2 error and inference speed.
 ## Next Steps
 
 ### Step 1 — Start the MLflow UI (optional but recommended)
-  ~/.local/bin/uv run mlflow ui
-  Opens dashboard at http://localhost:5000 — shows live loss curves and run comparison.
-  MLflow runs locally, no account or API key needed.
+  Run this in a separate terminal and leave it open while training:
+    ~/.local/bin/uv run mlflow ui
+  Then open http://localhost:5000 in your browser.
+  This gives you a live dashboard showing loss curves updating each epoch,
+  hyperparameters for each run, and side-by-side comparison of FNO vs U-Net.
+  MLflow stores everything locally in the mlruns/ folder — no account or API key needed.
 
 ### Step 2 — Train FNO
   ~/.local/bin/uv run python train.py --model fno --epochs 100
-  - Evaluates on test set every 5 epochs
-  - Saves best checkpoint to checkpoints/fno_best.pt
-  - Logs train/test rel-L2 to MLflow experiment: comp395-ns-benchmark
+
+  What this does:
+  - Loads all 10,000 training samples from data/nsforcing_train_128.pt
+  - Trains for 100 epochs using Adam optimizer (lr=1e-3) with cosine LR decay
+  - Loss function: relative L2 error — measures prediction error as a fraction of
+    the target's magnitude, so it's scale-invariant
+  - Every 5 epochs: evaluates on the full 2,000-sample test set and prints both
+    train and test loss
+  - Saves the checkpoint with the best test loss to checkpoints/fno_best.pt
+  - Logs all metrics and hyperparameters to MLflow
+  Expected time on RTX 2060: roughly 20-40 minutes for 100 epochs
 
 ### Step 3 — Train U-Net
   ~/.local/bin/uv run python train.py --model unet --epochs 100
-  - Same setup, saves to checkpoints/unet_best.pt
+
+  Identical setup to FNO. Saves best checkpoint to checkpoints/unet_best.pt.
+  U-Net has ~31M parameters vs FNO's ~4.7M, so it may train slightly slower
+  per epoch despite being a simpler architecture.
+  Expected time on RTX 2060: roughly 30-60 minutes for 100 epochs
 
 ### Step 4 — Evaluate both models
   ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt
   ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt
-  - Reports: test rel-L2, throughput (samples/sec), latency (ms/sample)
-  - These numbers are the core comparison for the writeup
+
+  What this reports for each model:
+  - Test rel-L2: prediction accuracy on the held-out 2,000 test samples
+    (lower is better; a random model scores ~1.0, a good model scores <0.1)
+  - Throughput: how many samples/sec the model can process at inference time
+  - Latency: average ms per sample
+  These three numbers are the core quantitative comparison for the writeup.
+
+### Step 5 — Write up results
+  Compare FNO vs U-Net on:
+  - Accuracy: which model achieves lower test rel-L2?
+  - Efficiency: which model is faster at inference? (FNO likely wins — fewer params)
+  - Parameter count: FNO ~4.7M vs U-Net ~31M — is the accuracy difference worth
+    the extra parameters?
+  The MLflow dashboard at http://localhost:5000 has training curves you can
+  screenshot directly for the report.
 
 ### Notes
-  - Training on CPU will be very slow (hours); GPU recommended
-  - PyTorch auto-detects GPU — no code changes needed
-  - (Optional) Add target normalization to train.py first to stabilize loss scale
-    (targets have ~20x wider variance than inputs)
+  - Both models have been smoke-tested and confirmed working (forward + backward pass)
+  - GPU (RTX 2060) confirmed available — PyTorch will use it automatically
+  - mlruns/ directory is created automatically on first training run (gitignored)
+  - checkpoints/ directory is created automatically by train.py
