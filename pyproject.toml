@@ -1,0 +1,15 @@
+[project]
+name = "comp395-final-group-project"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "h5py>=3.16.0",
+    "matplotlib>=3.10.8",
+    "mlflow>=3.11.1",
+    "numpy>=2.4.4",
+    "torch>=2.11.0",
+    "torchvision>=0.26.0",
+    "tqdm>=4.67.3",
+    "wandb>=0.26.0",
+]

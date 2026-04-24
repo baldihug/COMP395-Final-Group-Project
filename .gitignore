@@ -1,0 +1,19 @@
+# Dataset files (too large for GitHub — download via Zenodo doi:10.5281/zenodo.12825163)
+data/*.pt
+data/*.tgz
+data/*.h5
+data/*.mat
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Experiment tracking
+mlruns/
+wandb/
+
+# Jupyter
+.ipynb_checkpoints/
