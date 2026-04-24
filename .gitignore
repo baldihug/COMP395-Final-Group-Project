@@ -13,7 +13,11 @@ __pycache__/
 
 # Experiment tracking
 mlruns/
+mlflow.db
 wandb/
+
+# Model checkpoints
+checkpoints/
 
 # Jupyter
 .ipynb_checkpoints/
