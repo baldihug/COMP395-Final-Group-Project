@@ -36,6 +36,7 @@ def train(args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs)
 
+    mlflow.set_tracking_uri('sqlite:///mlflow.db')
     mlflow.set_experiment('comp395-ns-benchmark')
     with mlflow.start_run(run_name=f"{args.model}_run"):
         mlflow.log_params(vars(args))
