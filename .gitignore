@@ -13,7 +13,6 @@ __pycache__/
 
 # Experiment tracking
 mlruns/
-mlflow.db
 wandb/
 
 # Model checkpoints
