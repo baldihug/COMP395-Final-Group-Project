@@ -202,3 +202,66 @@ relative L2 error and inference speed.
   - GPU (RTX 2060) confirmed available — PyTorch will use it automatically
   - mlruns/ directory is created automatically on first training run (gitignored)
   - checkpoints/ directory is created automatically by train.py
+
+---
+
+## Dataset Deep Dive — 2026-04-24
+
+### What the dataset contains
+
+Each sample is a pair of 128×128 grids representing vorticity fields:
+  - x (input):  vorticity ω at time t   — low amplitude,  std ≈ 0.15, range ≈ [-0.76,  0.82]
+  - y (target): vorticity ω at time t+1 — high amplitude, std ≈ 0.71, range ≈ [-3.49,  3.93]
+
+The task is pure supervised regression: given a fluid snapshot, predict the next one.
+Loss is relative L2 — scale-invariant, so a random model scores ~1.0 and a good model scores <0.1.
+
+### What the visualisation figures show
+
+figures/sample_pairs.png — 5 columns × 2 rows
+  - Top row:    Input #i  — vorticity field fed to the model
+  - Bottom row: Target #i — vorticity field the model must predict
+  - Both rows share the same color scale per column (RdBu_r: red = positive/clockwise,
+    blue = negative/counterclockwise)
+  - Inputs look smooth and low-amplitude; targets look more turbulent and spread wider.
+
+figures/sample_diffs.png — 5 plots, one per example
+  - Each plot shows: diff = y[i] - x[i]  (target minus input)
+  - Isolates the change the model must learn over one timestep
+  - Diffs are large and structured (not noise) — the model cannot just copy the input.
+    This confirms the task is non-trivial and real physics must be learned.
+
+### What causes the fluid to swirl: Kolmogorov forcing
+
+The dataset name "nsforcing" means Navier-Stokes with forcing. The specific forcing is
+Kolmogorov forcing — a fixed sinusoidal body force that continuously pumps energy in at
+a low spatial frequency, e.g.:
+
+    f(x, y) = sin(k·y)   (force in x-direction, periodic in y, typically k=4)
+
+Why the fluid ends up swirling (not just flowing straight):
+  1. The forcing injects energy at one scale (the forcing wavenumber).
+  2. The nonlinear advection term u·∇ω transfers energy to other scales — turbulent cascade.
+  3. At ν=1e-4 (Re=10,000), viscous damping is weak, so energy spreads before dissipating.
+  4. Result: chaotic, swirling vortex structures — 2D turbulence.
+
+### What fluid it is and what the units are
+
+It is NOT a specific real fluid. The simulation is non-dimensionalized — standard practice
+in CFD. All numbers are dimensionless:
+
+  Quantity          In dataset              In reality
+  --------          ----------              ---------
+  Domain            [0,1]×[0,1] unit sq     some physical area in m²
+  Vorticity values  dimensionless ~[-4, 4]  1/seconds in real life
+  Viscosity ν       1e-4 (dimensionless)    m²/s for a real fluid
+  Time step         1 unit                  some real Δt in seconds
+
+ν=1e-4 gives Re=10,000 (turbulent regime) but does not map to water (ν≈1e-6 m²/s) or
+air (ν≈1.5e-5 m²/s) at any specific physical scale. It is a synthetic turbulence benchmark
+designed to be hard to predict.
+
+This is intentional: the model learns the dimensionless operator mapping ω(t) → ω(t+1).
+Whether that describes water in a pipe or air over a wing depends on how physical scales
+are chosen — the dimensionless PDE is the same either way. Li et al. (2021) use this same
+non-dimensionalized setup for the same reason.
