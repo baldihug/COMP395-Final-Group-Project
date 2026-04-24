@@ -137,7 +137,8 @@ relative L2 error and inference speed.
     train and test loss
   - Saves the checkpoint with the best test loss to checkpoints/fno_best.pt
   - Logs all metrics and hyperparameters to MLflow
-  Expected time on RTX 2060: roughly 20-40 minutes for 100 epochs
+  Expected time on RTX 2060: roughly 1–1.5 hours for 100 epochs
+  (10,000 samples / batch 20 = 500 steps/epoch; ~30–60 sec/epoch on RTX 2060)
 
 ### Step 3 — Train U-Net
   ~/.local/bin/uv run python train.py --model unet --epochs 100
@@ -145,7 +146,8 @@ relative L2 error and inference speed.
   Identical setup to FNO. Saves best checkpoint to checkpoints/unet_best.pt.
   U-Net has ~31M parameters vs FNO's ~4.7M, so it may train slightly slower
   per epoch despite being a simpler architecture.
-  Expected time on RTX 2060: roughly 30-60 minutes for 100 epochs
+  Expected time on RTX 2060: roughly 2–3 hours for 100 epochs
+  (31M params vs FNO's 4.7M; ~60–90 sec/epoch on RTX 2060)
 
 ### Step 4 — Standard evaluation (accuracy + speed)
   ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt
