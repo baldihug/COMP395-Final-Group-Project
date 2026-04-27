@@ -115,93 +115,63 @@ relative L2 error and inference speed.
 
 ---
 
-## Next Steps
+## Session 3 — 2026-04-27
 
-### Step 1 — Start the MLflow UI (optional but recommended)
-  Run this in a separate terminal and leave it open while training:
-    ~/.local/bin/uv run mlflow ui
-  Then open http://localhost:5000 in your browser.
-  This gives you a live dashboard showing loss curves updating each epoch,
-  hyperparameters for each run, and side-by-side comparison of FNO vs U-Net.
-  MLflow stores everything locally in the mlruns/ folder — no account or API key needed.
+### Training Complete
+- FNO trained for 100 epochs — best checkpoint saved to checkpoints/fno_best.pt
+- U-Net trained for 100 epochs — best checkpoint saved to checkpoints/unet_best.pt
+- MLflow training plots (loss curves) saved from the MLflow UI
 
-### Step 2 — Train FNO
-  ~/.local/bin/uv run python train.py --model fno --epochs 100
+### What Has Been Done (full summary)
+- [x] Environment set up (uv, PyTorch + CUDA, all dependencies)
+- [x] Dataset downloaded and extracted (data/nsforcing_train_128.pt, data/nsforcing_test_128.pt)
+- [x] Dataset visualized (figures/sample_pairs.png, sample_diffs.png, stats.png)
+- [x] FNO2d model implemented (models/fno.py, ~4.7M params)
+- [x] UNet model implemented (models/unet.py, ~31M params)
+- [x] Training loop implemented (train.py) with relative L2 loss, cosine LR, MLflow logging
+- [x] Evaluation script implemented (evaluate.py) — standard + super-resolution modes
+- [x] Presentation skeleton created (presentation.html, reveal.js)
+- [x] FNO trained 100 epochs — checkpoints/fno_best.pt saved
+- [x] U-Net trained 100 epochs — checkpoints/unet_best.pt saved
+- [x] MLflow training plots saved
 
-  What this does:
-  - Loads all 10,000 training samples from data/nsforcing_train_128.pt
-  - Trains for 100 epochs using Adam optimizer (lr=1e-3) with cosine LR decay
-  - Loss function: relative L2 error — measures prediction error as a fraction of
-    the target's magnitude, so it's scale-invariant
-  - Every 5 epochs: evaluates on the full 2,000-sample test set and prints both
-    train and test loss
-  - Saves the checkpoint with the best test loss to checkpoints/fno_best.pt
-  - Logs all metrics and hyperparameters to MLflow
-  Expected time on RTX 2060: roughly 1–1.5 hours for 100 epochs
-  (10,000 samples / batch 20 = 500 steps/epoch; ~30–60 sec/epoch on RTX 2060)
+### What Still Needs to Be Done
+- [ ] Step 1: Run standard evaluation on both models (get rel-L2, throughput, latency):
+        ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt
+        ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt
 
-### Step 3 — Train U-Net
-  ~/.local/bin/uv run python train.py --model unet --epochs 100
+- [ ] Step 2: Run zero-shot super-resolution evaluation on both models (rel-L2 at 64/128/256):
+        ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt  --super_res
+        ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt --super_res
 
-  Identical setup to FNO. Saves best checkpoint to checkpoints/unet_best.pt.
-  U-Net has ~31M parameters vs FNO's ~4.7M, so it may train slightly slower
-  per epoch despite being a simpler architecture.
-  Expected time on RTX 2060: roughly 2–3 hours for 100 epochs
-  (31M params vs FNO's 4.7M; ~60–90 sec/epoch on RTX 2060)
+- [ ] Step 3: Fill in presentation results tables (open presentation.html in browser):
+        - Slide 12 "Results — Accuracy & Speed": rel-L2, throughput, latency for both models
+        - Slide 13 "Zero-Shot Super-Resolution": rel-L2 at 64x64, 128x128, 256x256 for both models
+        - Replace dataset placeholder image with figures/sample_pairs.png
 
-### Step 4 — Standard evaluation (accuracy + speed)
-  ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt
-  ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt
+- [ ] Step 4: Write up results — compare FNO vs U-Net on accuracy, speed, and parameter count
 
-  What this reports for each model:
-  - Test rel-L2: prediction accuracy on the held-out 2,000 test samples
-    (lower is better; a random model scores ~1.0, a good model scores <0.1)
-  - Throughput: how many samples/sec the model can process at inference time
-  - Latency: average ms per sample
-  These three numbers are the core quantitative comparison for the writeup.
+---
 
-### Step 5 — Zero-shot super-resolution evaluation (required by project spec)
-  ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt  --super_res
-  ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt --super_res
+## Training Issues & Fixes — 2026-04-24
 
-  What this does:
-  - Both models were trained exclusively on 128x128 data
-  - This test resizes the test inputs and targets to 64x64, 128x128, and 256x256
-    using bilinear interpolation, then runs each through the trained model
-  - Reports rel-L2 at each resolution — shows how accuracy degrades away from
-    the training resolution
-  Why FNO is expected to win here:
-  - FNO operates in Fourier space, which is resolution-agnostic by design.
-    The spectral convolution truncates to 12 modes regardless of input size,
-    so the model generalises naturally to unseen resolutions.
-  - U-Net uses fixed convolutional kernels and pooling tied to spatial structure,
-    so it has no principled reason to generalise to new resolutions.
-  Note on methodology: we don't have true 256x256 simulation data, so the 256x256
-  ground truth is bilinearly upsampled from 128x128. This is a proxy for real
-  super-resolution but is the standard approach when only one resolution is available.
-  Mention this limitation in the writeup.
+### Issue 1: MLflow artifact logging crash
+- train.py called mlflow.log_artifact(ckpt_path) after saving the best checkpoint
+- On first test evaluation (epoch 5), this crashed with an os.makedirs recursion error
+  because MLflow could not create the artifact directory when using a SQLite backend
+  without an explicit artifact root configured
+- Fix: replaced mlflow.log_artifact() with mlflow.log_param('best_checkpoint', ckpt_path)
+  The checkpoint is already saved locally to checkpoints/; recording the path as a param
+  is sufficient and avoids the artifact store entirely
 
-### Step 5 — Fill in presentation results
-  Open presentation.html in a browser (no server needed — loads from CDN).
-  After running Steps 2-4, fill in the TBD cells in two slides:
-  - Slide 12 "Results — Accuracy & Speed": rel-L2, throughput, latency for both models
-  - Slide 13 "Zero-Shot Super-Resolution": rel-L2 at 64x64, 128x128, 256x256 for both models
-  Also replace the placeholder image on the Dataset slide with figures/sample_pairs.png.
-
-### Step 6 — Write up results
-  Compare FNO vs U-Net on:
-  - Accuracy: which model achieves lower test rel-L2?
-  - Efficiency: which model is faster at inference? (FNO likely wins — fewer params)
-  - Parameter count: FNO ~4.7M vs U-Net ~31M — is the accuracy difference worth
-    the extra parameters?
-  The MLflow dashboard at http://localhost:5000 has training curves you can
-  screenshot directly for the report.
-
-### Notes
-  - Both models have been smoke-tested and confirmed working (forward + backward pass)
-  - GPU (RTX 2060) confirmed available — PyTorch will use it automatically
-  - mlruns/ directory is created automatically on first training run (gitignored)
-  - checkpoints/ directory is created automatically by train.py
+### Issue 2: Training frozen on first epoch (DataLoader memory pressure)
+- Training process launched but no epoch output printed; process appeared hung
+- GPU showed 0% utilization despite the training process holding ~1.6 GB VRAM
+- Root cause: num_workers=4 in both DataLoaders caused 4 worker processes to each
+  load a copy of the dataset into RAM simultaneously (~2 GB each = ~8 GB total),
+  exhausting available RAM and causing the system to swap
+- Fix: reduced num_workers from 4 to 2 in both train_loader and test_loader
+  This halved the concurrent RAM usage and allowed training to proceed normally
 
 ---
 

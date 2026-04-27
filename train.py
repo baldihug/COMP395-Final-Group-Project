@@ -19,9 +19,9 @@ def train(args):
     train_ds = NSForcingDataset('data/nsforcing_train_128.pt')
     test_ds = NSForcingDataset('data/nsforcing_test_128.pt')
     train_loader = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True,
-                              num_workers=4, pin_memory=True)
+                              num_workers=2, pin_memory=True)
     test_loader = DataLoader(test_ds, batch_size=args.batch_size, shuffle=False,
-                             num_workers=4, pin_memory=True)
+                             num_workers=2, pin_memory=True)
 
     if args.model == 'fno':
         model = FNO2d(modes1=args.fno_modes, modes2=args.fno_modes,
@@ -76,7 +76,7 @@ def train(args):
                     best_test_loss = test_loss
                     ckpt_path = f"checkpoints/{args.model}_best.pt"
                     torch.save(model.state_dict(), ckpt_path)
-                    mlflow.log_artifact(ckpt_path)
+                    mlflow.log_param('best_checkpoint', ckpt_path)
             else:
                 print(f"Epoch {epoch:3d}/{args.epochs} | train={train_loss:.4f}")
 
