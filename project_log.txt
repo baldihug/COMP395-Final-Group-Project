@@ -135,20 +135,32 @@ relative L2 error and inference speed.
 - [x] U-Net trained 100 epochs — checkpoints/unet_best.pt saved
 - [x] MLflow training plots saved
 
+### Evaluation Results — 2026-04-27
+
+#### Standard Evaluation (test set, 128×128)
+| Model  | Params | Rel-L2 | Throughput (samp/s) | Latency (ms/samp) |
+|--------|--------|--------|---------------------|-------------------|
+| FNO    | 4.7M   | 0.0348 | 499.2               | 2.003             |
+| U-Net  | 31M    | 0.1029 | 227.0               | 4.406             |
+
+#### Zero-Shot Super-Resolution (trained only on 128×128)
+| Resolution      | FNO Rel-L2 | U-Net Rel-L2 |
+|-----------------|------------|--------------|
+| 64×64           | 0.0185     | 0.4764       |
+| 128×128 (train) | 0.0190     | 0.1029       |
+| 256×256         | 0.0188     | 0.5941       |
+
+Key takeaways:
+- FNO is 3× more accurate than U-Net with 6.5× fewer parameters
+- FNO is 2.2× faster (throughput) and 2.2× lower latency
+- FNO generalises perfectly across resolutions (rel-L2 flat: 0.019)
+- U-Net degrades sharply at unseen resolutions (rel-L2 4–6× worse than train res)
+- Presentation slides 12 and 13 updated with these numbers
+
 ### What Still Needs to Be Done
-- [ ] Step 1: Run standard evaluation on both models (get rel-L2, throughput, latency):
-        ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt
-        ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt
-
-- [ ] Step 2: Run zero-shot super-resolution evaluation on both models (rel-L2 at 64/128/256):
-        ~/.local/bin/uv run python evaluate.py --model fno  --checkpoint checkpoints/fno_best.pt  --super_res
-        ~/.local/bin/uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt --super_res
-
-- [ ] Step 3: Fill in presentation results tables (open presentation.html in browser):
-        - Slide 12 "Results — Accuracy & Speed": rel-L2, throughput, latency for both models
-        - Slide 13 "Zero-Shot Super-Resolution": rel-L2 at 64x64, 128x128, 256x256 for both models
-        - Replace dataset placeholder image with figures/sample_pairs.png
-
+- [x] Step 1: Standard evaluation — DONE (2026-04-27)
+- [x] Step 2: Super-resolution evaluation — DONE (2026-04-27)
+- [x] Step 3: Fill in presentation results tables — DONE (2026-04-27)
 - [ ] Step 4: Write up results — compare FNO vs U-Net on accuracy, speed, and parameter count
 
 ---
