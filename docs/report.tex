@@ -238,15 +238,16 @@ fine vortex detail.
 U-Net captures the broad structure but misses fine-grained vorticity features
 and exhibits higher pointwise error throughout.
 
-\begin{figure*}[tb]
+\begin{figure}[t]
   \centering
-  \includegraphics[width=\textwidth]{predictions.png}
+  \includegraphics[width=\linewidth]{predictions.png}
   \caption{Six test samples ordered from lowest to highest FNO error.
            Rows: input $\omega(t)$ / FNO prediction / U-Net prediction / ground
            truth $\omega(t+1)$.
-           Per-sample relative $L^2$ scores annotated per column.}
+           Per-sample relative $L^2$ scores annotated per column.
+           See Appendix~\ref{app:figures} for enlarged version.}
   \label{fig:predictions}
-\end{figure*}
+\end{figure}
 
 Figure~\ref{fig:error_maps} shows absolute error maps $|\hat{u} - u|$ for both
 models.
@@ -254,16 +255,17 @@ FNO errors are small and diffuse; U-Net errors are concentrated at vortex cores
 and high-gradient regions, consistent with difficulty learning fine-scale turbulent
 features.
 
-\begin{figure*}[tb]
+\begin{figure}[t]
   \centering
-  \includegraphics[width=\textwidth]{error_maps.png}
+  \includegraphics[width=\linewidth]{error_maps.png}
   \caption{Absolute prediction error $|\hat{u} - u|$ for FNO (top) and U-Net
            (bottom) on the same six samples as Figure~\ref{fig:predictions}.
            Color scale: hot (black = zero, white = maximum).
            U-Net errors are systematically larger and concentrated at vortex
-           boundaries.}
+           boundaries.
+           See Appendix~\ref{app:figures} for enlarged version.}
   \label{fig:error_maps}
-\end{figure*}
+\end{figure}
 
 Figure~\ref{fig:error_hist} shows the per-sample relative $L^2$ distribution
 across the full 2{,}000-sample test set.
@@ -381,5 +383,57 @@ simulators that can generalize across discretizations.
 % ─── REFERENCES ──────────────────────────────────────────────────────────────
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{refs}
+
+% ─── APPENDIX ────────────────────────────────────────────────────────────────
+\appendix
+\section{Full-Size Figures}
+\label{app:figures}
+
+The figures below are enlarged versions of those in the main body, included
+for ease of inspection.
+
+\clearpage
+\begin{figure*}[p]
+  \centering
+  \includegraphics[width=\textwidth]{sample_pairs.png}
+  \caption{(Enlarged) Five input--target vorticity pairs from the training set.
+           Top row: input $\omega(t)$.
+           Bottom row: target $\omega(t+1)$.}
+\end{figure*}
+
+\clearpage
+\begin{figure*}[p]
+  \centering
+  \includegraphics[width=\textwidth]{predictions.png}
+  \caption{(Enlarged) Six test samples ordered from lowest to highest FNO error.
+           Rows: input $\omega(t)$ / FNO prediction / U-Net prediction / ground
+           truth $\omega(t+1)$.}
+\end{figure*}
+
+\clearpage
+\begin{figure*}[p]
+  \centering
+  \includegraphics[width=\textwidth]{error_maps.png}
+  \caption{(Enlarged) Absolute prediction error $|\hat{u} - u|$ for FNO (top)
+           and U-Net (bottom).
+           Color scale: hot (black = zero, white = maximum).}
+\end{figure*}
+
+\clearpage
+\begin{figure*}[p]
+  \centering
+  \includegraphics[width=0.8\textwidth]{error_histogram.png}
+  \caption{(Enlarged) Distribution of per-sample relative $L^2$ error over the
+           full test set.}
+\end{figure*}
+
+\clearpage
+\begin{figure*}[p]
+  \centering
+  \includegraphics[width=\textwidth]{super_res.png}
+  \caption{(Enlarged) Zero-shot super-resolution on a single test sample.
+           Columns: 64$\times$64, 128$\times$128 (train resolution), 256$\times$256.
+           Rows: ground truth / FNO prediction / U-Net prediction.}
+\end{figure*}
 
 \end{document}

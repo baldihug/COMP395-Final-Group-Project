@@ -201,6 +201,20 @@ Key takeaways:
 
 ---
 
+## Session 9 — 2026-05-03
+
+### Figure Layout Overhaul + Appendix
+- All body figures changed back to single-column figure[t] with \linewidth
+  (removed remaining figure* from the main body — this was the root cause of
+  floats drifting to the end of the document)
+- Added Appendix A "Full-Size Figures" after the bibliography containing
+  enlarged versions of all 5 figures on their own pages (figure*[p] with
+  \clearpage between each)
+- Body figure captions for predictions and error_maps now reference the appendix
+- Result: report is 9 pages total — 4 body + references + 5 appendix pages
+
+---
+
 ## Session 8 — 2026-05-03
 
 ### Report Layout Fixes
