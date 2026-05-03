@@ -165,6 +165,73 @@ Key takeaways:
 
 ---
 
+## Session 4 — 2026-05-03
+
+### Cleanup
+- Removed three Windows Zone.Identifier metadata files that were created when
+  checkpoint files were copied from a Windows filesystem:
+    - checkpoints/fno_best.pt:Zone.Identifier
+    - checkpoints/unet_best.pt:Zone.Identifier
+    - COMP 395 Final - Latex Report Draft.pdf:Zone.Identifier
+- These are harmless but clutter the repo; deleted and committed.
+
+### Result Visualizations
+- visualize_results.py: new script generating 4 result figures from the trained
+  checkpoints. Run with: uv run python visualize_results.py
+  Outputs saved to figures/:
+
+  figures/predictions.png
+    6 test samples spanning FNO error from best to worst (evenly spaced by
+    sorted rel-L2). Four rows per column: input ω(t) / FNO prediction /
+    U-Net prediction / ground truth ω(t+1). All rows share the same RdBu_r
+    color scale per column so magnitudes are directly comparable. Per-sample
+    rel-L2 scores annotated on the FNO and U-Net rows. Shows qualitatively
+    that FNO captures fine vortex structure while U-Net smooths it out.
+
+  figures/error_maps.png
+    Absolute error |pred − truth| for the same 6 samples, displayed as a
+    heat map (hot colormap: black = zero, white/yellow = large error).
+    FNO (top row) shows small diffuse errors; U-Net (bottom row) shows large
+    concentrated errors at vortex cores and high-gradient regions. Confirms
+    U-Net struggles most where the physics is most complex.
+
+  figures/super_res.png
+    Zero-shot super-resolution on one median-error test sample.
+    3 columns: 64×64 / 128×128 (train resolution) / 256×256.
+    3 rows: ground truth / FNO prediction / U-Net prediction.
+    Ground truth and inputs are bilinearly resampled to each resolution.
+    FNO maintains sharp, accurate predictions at all three resolutions.
+    U-Net produces blurry outputs at 64×64 and introduces artifacts at
+    256×256, consistent with fixed-kernel resolution dependence.
+
+  figures/error_histogram.png
+    Distribution of per-sample relative L2 error across the full 2,000-sample
+    test set. FNO (blue) is tightly clustered near its mean of 0.035;
+    U-Net (red) is wider and skewed toward higher error with mean 0.103.
+    Dashed vertical lines mark each model's mean. Shows FNO is not only more
+    accurate on average but also more consistent across samples.
+
+### LaTeX Report Draft
+- report.tex: rough draft of the written report. Two-column, 11pt article.
+  Sections: Abstract, Introduction, Background, Dataset, Methods, Results,
+  Discussion, Conclusion, References.
+  - All four result figures referenced and captioned (predictions.png,
+    error_maps.png, super_res.png, error_histogram.png)
+  - Both results tables included (standard eval, zero-shot super-resolution)
+  - Discussion covers: why FNO outperforms U-Net, resolution invariance
+    mechanism, parameter efficiency, and limitations
+  - Three references: Li et al. 2021 (FNO), Ronneberger et al. 2015 (U-Net),
+    Zenodo dataset
+  Status: ROUGH DRAFT — content complete, needs polishing and review before
+  final submission. TODO: fill in group member names on title page.
+
+### What Still Needs to Be Done
+- [ ] Polish and finalize report.tex (add group member names, proofread)
+- [ ] Add MLflow training loss curve screenshots to figures/ and presentation
+- [ ] Final presentation review
+
+---
+
 ## Training Issues & Fixes — 2026-04-24
 
 ### Issue 1: MLflow artifact logging crash
