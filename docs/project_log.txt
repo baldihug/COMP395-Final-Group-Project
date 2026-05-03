@@ -201,6 +201,26 @@ Key takeaways:
 
 ---
 
+## Session 8 — 2026-05-03
+
+### Report Layout Fixes
+- Removed \keywords{} from report.tex (was appearing below abstract)
+- Fixed figure 5 (super_res) being deferred to the end of the document:
+    - Root cause: three figure* environments in sigconf mode can only be
+      placed at the top of a page; LaTeX queued them and super_res ended up
+      stranded on a final page alone
+    - Added \usepackage{stfloats} — unlocks bottom-of-page placement for
+      figure* environments, giving LaTeX more freedom
+    - Changed predictions and error_maps figure* from [t] to [tb] to allow
+      bottom-of-page placement as well as top
+    - Converted super_res from figure*[t] to regular figure[t] (single
+      column) — its 3x3 grid is still readable at column width, and as a
+      regular float it can be placed inline
+- Result: report is now 4 pages (was 5) with all figures placed near their
+  in-text references in a linear reading order
+
+---
+
 ## Session 7 — 2026-05-03
 
 ### Converted to ACM LaTeX Format

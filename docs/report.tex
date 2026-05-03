@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \graphicspath{{../figures/}}
 \usepackage{booktabs}
+\usepackage{stfloats}
 
 % ─── METADATA ────────────────────────────────────────────────────────────────
 \title{Fourier Neural Operators for 2D Navier--Stokes: A Comparison with U-Net}
@@ -22,8 +23,6 @@
 
 \date{May 2026}
 
-\keywords{neural operators, Fourier Neural Operator, Navier--Stokes, fluid dynamics,
-          surrogate modelling, super-resolution}
 
 % ─── DOCUMENT ────────────────────────────────────────────────────────────────
 \begin{document}
@@ -239,7 +238,7 @@ fine vortex detail.
 U-Net captures the broad structure but misses fine-grained vorticity features
 and exhibits higher pointwise error throughout.
 
-\begin{figure*}[t]
+\begin{figure*}[tb]
   \centering
   \includegraphics[width=\textwidth]{predictions.png}
   \caption{Six test samples ordered from lowest to highest FNO error.
@@ -255,7 +254,7 @@ FNO errors are small and diffuse; U-Net errors are concentrated at vortex cores
 and high-gradient regions, consistent with difficulty learning fine-scale turbulent
 features.
 
-\begin{figure*}[t]
+\begin{figure*}[tb]
   \centering
   \includegraphics[width=\textwidth]{error_maps.png}
   \caption{Absolute prediction error $|\hat{u} - u|$ for FNO (top) and U-Net
@@ -310,9 +309,9 @@ U-Net's error at 64$\times$64 and 256$\times$256 is $4.6$--$5.8\times$ higher
 than at its training resolution, demonstrating that fixed spatial kernels do not
 generalize across grid spacings.
 
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
-  \includegraphics[width=\textwidth]{super_res.png}
+  \includegraphics[width=\linewidth]{super_res.png}
   \caption{Zero-shot super-resolution on a single test sample.
            Columns: 64$\times$64, 128$\times$128 (train resolution), 256$\times$256.
            Rows: ground truth / FNO prediction / U-Net prediction.
@@ -320,7 +319,7 @@ generalize across grid spacings.
            U-Net produces smooth but blurry outputs at 64$\times$64 and
            introduces artifacts at 256$\times$256.}
   \label{fig:super_res}
-\end{figure*}
+\end{figure}
 
 % ─── DISCUSSION ──────────────────────────────────────────────────────────────
 \section{Discussion}
