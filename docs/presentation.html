@@ -10,105 +10,181 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.js"></script>
   <style>
     :root {
-      --accent: #58a6ff;
+      --accent:  #58a6ff;
       --accent2: #f78166;
-      --green: #3fb950;
+      --green:   #3fb950;
+      --yellow:  #e3b341;
     }
     .reveal h1, .reveal h2, .reveal h3 { text-transform: none; }
     .reveal h2 { color: var(--accent); }
-    .reveal h3 { color: var(--accent2); font-size: 1.1em; margin-bottom: 0.4em; }
+    .reveal h3 { color: var(--accent2); font-size: 1.05em; margin-bottom: 0.3em; }
     .reveal ul { list-style: none; padding: 0; }
     .reveal ul li::before { content: "▸ "; color: var(--accent); }
-    .reveal ul li { margin: 0.4em 0; }
-    .reveal .small { font-size: 0.72em; color: #aaa; }
-    .reveal .highlight { color: var(--accent); font-weight: bold; }
+    .reveal ul li { margin: 0.35em 0; }
+    .reveal .small  { font-size: 0.72em; color: #aaa; }
+    .reveal .xsmall { font-size: 0.62em; color: #888; }
+    .reveal .highlight  { color: var(--accent);  font-weight: bold; }
     .reveal .highlight2 { color: var(--accent2); font-weight: bold; }
-    .reveal .green { color: var(--green); font-weight: bold; }
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2em; align-items: start; }
-    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5em; align-items: start; }
+    .reveal .green  { color: var(--green);  font-weight: bold; }
+    .reveal .yellow { color: var(--yellow); font-weight: bold; }
+
+    /* Layout grids */
+    .two-col   { display: grid; grid-template-columns: 1fr 1fr;     gap: 1.6em; align-items: start; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2em; align-items: start; }
+
+    /* Generic card box */
     .box {
       background: rgba(255,255,255,0.07);
       border: 1px solid rgba(255,255,255,0.15);
       border-radius: 8px;
-      padding: 0.8em 1em;
+      padding: 0.7em 0.9em;
     }
     .box h3 { margin-top: 0; }
+
+    /* Callout boxes */
+    .analogy-box {
+      background: rgba(247,129,102,0.12);
+      border-left: 3px solid var(--accent2);
+      border-radius: 4px;
+      padding: 0.55em 0.9em;
+      margin: 0.5em 0;
+      font-size: 0.82em;
+      text-align: left;
+    }
+    .key-box {
+      background: rgba(63,185,80,0.12);
+      border-left: 3px solid var(--green);
+      border-radius: 4px;
+      padding: 0.55em 0.9em;
+      margin: 0.5em 0;
+      font-size: 0.82em;
+      text-align: left;
+    }
+    .info-box {
+      background: rgba(88,166,255,0.12);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 0.55em 0.9em;
+      margin: 0.5em 0;
+      font-size: 0.82em;
+      text-align: left;
+    }
+
+    /* Equation box */
     .equation-box {
       background: rgba(88,166,255,0.1);
       border-left: 3px solid var(--accent);
       border-radius: 4px;
-      padding: 0.6em 1em;
-      margin: 0.6em 0;
-      font-size: 0.9em;
+      padding: 0.5em 0.9em;
+      margin: 0.5em 0;
+      font-size: 0.88em;
     }
+
+    /* Inline tag chips */
     .tag {
       display: inline-block;
       background: var(--accent);
       color: #000;
       border-radius: 4px;
-      padding: 0.1em 0.5em;
-      font-size: 0.7em;
+      padding: 0.1em 0.45em;
+      font-size: 0.68em;
       font-weight: bold;
       vertical-align: middle;
     }
-    .tag.red { background: var(--accent2); }
+    .tag.red   { background: var(--accent2); }
     .tag.green { background: var(--green); }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
-    th { background: rgba(88,166,255,0.2); color: var(--accent); padding: 0.5em; }
-    td { padding: 0.4em 0.6em; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
-    .placeholder {
-      border: 2px dashed rgba(255,255,255,0.3);
-      border-radius: 8px;
-      padding: 1.5em;
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+    th { background: rgba(88,166,255,0.2); color: var(--accent); padding: 0.45em 0.6em; }
+    td { padding: 0.35em 0.6em; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
+
+    /* Figures */
+    .fig { border-radius: 6px; display: block; margin: 0 auto; }
+
+    /* Step badge */
+    .step {
+      display: inline-block;
+      background: var(--accent);
+      color: #000;
+      border-radius: 50%;
+      width: 1.4em; height: 1.4em;
+      line-height: 1.4em;
       text-align: center;
-      color: #888;
-      font-style: italic;
-      font-size: 0.8em;
+      font-weight: bold;
+      font-size: 0.85em;
+      margin-right: 0.4em;
+      flex-shrink: 0;
     }
-    .slide-num { color: #555; font-size: 0.6em; }
+    .step-row { display: flex; align-items: flex-start; margin: 0.4em 0; font-size: 0.82em; }
   </style>
 </head>
 <body>
 <div class="reveal">
 <div class="slides">
 
-<!-- ─── TITLE ─────────────────────────────────────────────────── -->
+<!-- ─── 1. TITLE ──────────────────────────────────────────────────── -->
 <section>
-  <h1 style="font-size:1.5em; color: var(--accent);">
+  <h1 style="font-size:1.45em; color:var(--accent);">
     Fourier Neural Operators<br>for Fluid Dynamics
   </h1>
   <h3 style="color:#ccc; font-weight:normal;">FNO vs U-Net on 2D Navier-Stokes</h3>
   <br>
   <p style="color:#aaa; font-size:0.8em;">COMP 395 — Deep Learning &nbsp;|&nbsp; Final Project</p>
-  <p style="color:#666; font-size:0.7em;">Ian Havill &nbsp;·&nbsp; Hugh Baldwin &nbsp;·&nbsp; Aaron Chen</p>
+  <p style="color:#666; font-size:0.72em;">Ian Havill &nbsp;·&nbsp; Hugh Baldwin &nbsp;·&nbsp; Aaron Chen<br>Occidental College</p>
 </section>
 
-<!-- ─── OUTLINE ────────────────────────────────────────────────── -->
+<!-- ─── 2. ONE-SENTENCE SUMMARY ───────────────────────────────────── -->
+<section>
+  <h2>What We Did</h2>
+  <p>We trained two AI models to <span class="highlight">watch swirling fluid</span> and predict what it looks like one moment later.</p>
+  <br>
+  <div class="two-col">
+    <div class="box" style="border-color:var(--accent);">
+      <h3>FNO</h3>
+      <p class="small">Designed with fluid physics in mind.<br>Works in <em>frequency space</em>.</p>
+    </div>
+    <div class="box" style="border-color:var(--accent2);">
+      <h3>U-Net</h3>
+      <p class="small">General-purpose image model.<br>Used as our baseline comparison.</p>
+    </div>
+  </div>
+  <br>
+  <div class="key-box">
+    <strong>Punchline:</strong> FNO was <span class="highlight">3× more accurate</span>, <span class="highlight">2× faster</span>, and used <span class="highlight">6× fewer parameters</span> — and worked at resolutions it had never seen during training.
+  </div>
+</section>
+
+<!-- ─── 3. OUTLINE ────────────────────────────────────────────────── -->
 <section>
   <h2>What We'll Cover</h2>
   <div class="two-col" style="margin-top:1em;">
     <div>
       <h3>Background</h3>
       <ul>
-        <li>What is fluid dynamics?</li>
-        <li>What is a PDE?</li>
-        <li>The Navier-Stokes equations</li>
-        <li>Why is solving them hard?</li>
+        <li>Fluid dynamics & why it's hard</li>
+        <li>Vorticity fields</li>
+        <li>Navier-Stokes equations</li>
+        <li>Neural operators</li>
+        <li>How FNO works (step by step)</li>
+        <li>U-Net baseline</li>
       </ul>
     </div>
     <div>
       <h3>Our Work</h3>
       <ul>
-        <li>Neural operators & FNO</li>
-        <li>U-Net baseline</li>
-        <li>Dataset & setup</li>
-        <li>Results & super-resolution</li>
+        <li>Dataset & training setup</li>
+        <li>Accuracy & speed results</li>
+        <li>Prediction visualisations</li>
+        <li>Error maps</li>
+        <li>Zero-shot super-resolution</li>
+        <li>Why FNO wins</li>
       </ul>
     </div>
   </div>
 </section>
 
-<!-- ─── WHAT IS FLUID DYNAMICS ─────────────────────────────────── -->
+<!-- ─── 4. FLUID DYNAMICS ─────────────────────────────────────────── -->
 <section>
   <h2>What Is Fluid Dynamics?</h2>
   <p>The study of how <span class="highlight">liquids and gases move</span>.</p>
@@ -127,190 +203,153 @@
     </div>
   </div>
   <br>
-  <p class="small">In all these cases, we want to answer: <em>"given the fluid's state right now,<br>what does it look like a moment later?"</em></p>
+  <p class="small">In all these cases, we want to answer:<br><em>"Given the fluid's state right now, what does it look like a moment later?"</em></p>
+  <div class="analogy-box">
+    <strong>Problem:</strong> Solving the governing equations numerically can take <strong>minutes to hours</strong> on a supercomputer — and must be rerun from scratch for every new initial condition.
+  </div>
 </section>
 
-<!-- ─── WHAT IS A PDE ──────────────────────────────────────────── -->
+<!-- ─── 5. VORTICITY ──────────────────────────────────────────────── -->
 <section>
-  <h2>What Is a PDE?</h2>
-  <p>A <span class="highlight">Partial Differential Equation</span> is an equation that describes how something changes across both <span class="highlight">space</span> and <span class="highlight">time</span> at once.</p>
+  <h2>What We Track: Vorticity</h2>
+  <p>Instead of tracking velocity directly, we use <span class="highlight">vorticity</span> — a number at every point describing how much the fluid is <em>spinning</em> there.</p>
   <br>
-  <div class="two-col">
-    <div>
-      <h3>Regular equation</h3>
-      <div class="equation-box">\( x^2 + 3x - 4 = 0 \)</div>
-      <p class="small">Solve for a single unknown number</p>
-    </div>
-    <div>
-      <h3>PDE</h3>
-      <div class="equation-box">\( \frac{\partial u}{\partial t} = \alpha \frac{\partial^2 u}{\partial x^2} \)</div>
-      <p class="small">Solve for a function \(u(x,t)\) — a value at <em>every point in space and time</em></p>
-    </div>
+  <div class="analogy-box">
+    <strong>🌀 Analogy:</strong> Picture a river. Where the water flows straight, vorticity ≈ 0. Where it curls into a whirlpool, vorticity is large.<br>
+    Positive = clockwise spin &nbsp;|&nbsp; Negative = counter-clockwise spin
   </div>
   <br>
-  <p class="small">The equation above is the <strong>heat equation</strong> — how temperature spreads through a rod. Fluid dynamics uses far more complex PDEs.</p>
+  <div class="two-col" style="font-size:0.85em;">
+    <div class="box">
+      <h3>Input \(\omega(t)\)</h3>
+      <p class="small">Current vorticity field<br>128×128 grid of numbers<br>Think: one frame of the fluid movie</p>
+    </div>
+    <div class="box">
+      <h3>Target \(\omega(t+1)\)</h3>
+      <p class="small">Vorticity one timestep later<br>What the model must predict<br>Think: the next frame</p>
+    </div>
+  </div>
 </section>
 
-<!-- ─── NAVIER-STOKES ──────────────────────────────────────────── -->
+<!-- ─── 6. NAVIER-STOKES ───────────────────────────────────────────── -->
 <section>
   <h2>The Navier-Stokes Equations</h2>
-  <p>These PDEs govern <span class="highlight">all</span> viscous fluid flow. Written for incompressible 2D flow:</p>
-  <div class="equation-box" style="font-size:0.85em;">
+  <p class="small">These PDEs govern <span class="highlight">all</span> viscous fluid flow:</p>
+  <div class="equation-box" style="font-size:0.82em; text-align:center;">
     \[
-      \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u}
-      = -\nabla p + \nu \nabla^2 \mathbf{u} + \mathbf{f}
+      \underbrace{\frac{\partial \mathbf{u}}{\partial t}}_{\text{change}} +
+      \underbrace{(\mathbf{u} \cdot \nabla)\mathbf{u}}_{\text{self-pushing}} =
+      \underbrace{-\nabla p}_{\text{pressure}} +
+      \underbrace{\nu \nabla^2 \mathbf{u}}_{\text{viscosity}} +
+      \underbrace{\mathbf{f}}_{\text{forcing}}
     \]
   </div>
-  <div class="three-col" style="margin-top:0.8em; font-size:0.82em;">
+  <div class="three-col" style="margin-top:0.7em; font-size:0.78em;">
     <div class="box">
-      <h3>\(\mathbf{u}\)</h3>
-      <p class="small">Velocity field — how fast and which way the fluid moves at every point</p>
+      <h3>Self-pushing term</h3>
+      <p class="small">\((\mathbf{u}\cdot\nabla)\mathbf{u}\) — the fluid's own motion shapes its future motion. This <em>nonlinear</em> term causes turbulence and chaos.</p>
     </div>
     <div class="box">
-      <h3>\(\nu \nabla^2 \mathbf{u}\)</h3>
-      <p class="small">Viscosity term — how "thick" the fluid is (honey vs water)</p>
+      <h3>Viscosity \(\nu\)</h3>
+      <p class="small">How "thick" the fluid is.<br>Honey: high \(\nu\). Air: low \(\nu\).<br>Our dataset: \(\nu=10^{-4}\) → turbulent (Re = 10,000)</p>
     </div>
     <div class="box">
-      <h3>\(\mathbf{f}\)</h3>
-      <p class="small">External forcing — e.g. a fan blowing, gravity pulling</p>
+      <h3>Forcing \(\mathbf{f}\)</h3>
+      <p class="small">Kolmogorov forcing: a sinusoidal push \(\sin(4\pi y)\) that pumps energy in continuously — like waving a giant paddle.</p>
     </div>
   </div>
   <br>
-  <p class="small">We work with <span class="highlight">vorticity</span> \(\omega = \nabla \times \mathbf{u}\) — a scalar field measuring how much the fluid <em>rotates</em> at each point.</p>
+  <p class="small">We work with <span class="highlight">vorticity</span> \(\omega = \nabla\times\mathbf{u}\), which reduces this to a scalar field problem.</p>
 </section>
 
-<!-- ─── WHY HARD ───────────────────────────────────────────────── -->
+<!-- ─── 7. NEURAL OPERATORS ───────────────────────────────────────── -->
 <section>
-  <h2>Why Is This Hard to Solve?</h2>
+  <h2>Our Approach: Learn It from Data</h2>
+  <p>Instead of solving the equations every time, train a network to <span class="highlight">approximate the solution operator</span> directly.</p>
+  <br>
   <div class="two-col">
-    <div>
-      <h3>Traditional approach</h3>
-      <ul>
-        <li>Divide space into a fine grid</li>
-        <li>Numerically step forward in time</li>
-        <li>Accurate, but <span class="highlight2">extremely slow</span></li>
-      </ul>
-      <br>
-      <p class="small">A single 128×128 simulation<br>can take <strong>minutes to hours</strong><br>on a supercomputer at high fidelity</p>
-    </div>
-    <div>
-      <h3>The turbulence problem</h3>
-      <div class="placeholder" style="height:140px; line-height:140px;">
-        [turbulent vorticity field image]
+    <div class="box">
+      <h3>Standard neural network</h3>
+      <p class="small">Maps <strong>vectors → vectors</strong><br>Fixed input size<br>Tied to the resolution it was trained at</p>
+      <div class="analogy-box" style="margin-top:0.5em;">Like a calculator that only works on numbers 0–100.
       </div>
-      <p class="small">Tiny changes in initial conditions cascade into wildly different outcomes (<em>chaos</em>)</p>
-    </div>
-  </div>
-  <br>
-  <p class="small">We need a faster way to simulate fluid dynamics — ideally one that can <span class="highlight">learn the physics from data</span>.</p>
-</section>
-
-<!-- ─── NEURAL OPERATORS ───────────────────────────────────────── -->
-<section>
-  <h2>Neural Operators</h2>
-  <p>A regular neural network maps <span class="highlight">vectors → vectors</span>.<br>
-  A neural operator maps <span class="highlight">functions → functions</span>.</p>
-  <br>
-  <div class="two-col">
-    <div class="box">
-      <h3>Standard NN</h3>
-      <p class="small">Input: fixed-size vector (e.g. 128 numbers)<br>
-      Output: fixed-size vector<br>
-      <span style="color:var(--accent2);">Tied to one resolution.</span></p>
     </div>
     <div class="box">
-      <h3>Neural Operator</h3>
-      <p class="small">Input: a function over a domain (e.g. a vorticity field at any resolution)<br>
-      Output: another function<br>
-      <span style="color:var(--green);">Resolution-independent.</span></p>
-    </div>
-  </div>
-  <br>
-  <p class="small">For PDEs this is powerful: learn the operator \(\mathcal{G}: u(t) \mapsto u(t + \Delta t)\) once, then apply it at any resolution.</p>
-</section>
-
-<!-- ─── FNO ────────────────────────────────────────────────────── -->
-<section>
-  <h2>Fourier Neural Operator (FNO)</h2>
-  <p class="small">Li et al., 2021 — <em>"Fourier Neural Operator for Parametric Partial Differential Equations"</em></p>
-  <br>
-  <div class="two-col">
-    <div>
-      <ul>
-        <li><span class="highlight">Key idea:</span> apply convolutions in <em>frequency space</em> instead of physical space</li>
-        <li>Transform input to frequency space with FFT</li>
-        <li>Keep only the <span class="highlight">lowest \(k\) Fourier modes</span> (large-scale structure)</li>
-        <li>Apply learned weights, transform back</li>
-        <li>Stack \(N\) of these layers</li>
-      </ul>
-    </div>
-    <div>
-      <div class="equation-box" style="font-size:0.8em;">
-        \[
-          (Kv)(x) = \mathcal{F}^{-1}\!\bigl(R \cdot \mathcal{F}(v)\bigr)(x)
-        \]
+      <h3>Neural operator</h3>
+      <p class="small">Maps <strong>functions → functions</strong><br>Any input resolution<br>Learns the operator \(\mathcal{G}: \omega(t)\mapsto\omega(t+\Delta t)\)</p>
+      <div class="key-box" style="margin-top:0.5em;">Like a formula — works for any input, no matter how you measure it.
       </div>
-      <p class="small">\(\mathcal{F}\) = FFT &nbsp;·&nbsp; \(R\) = learned weights<br>\(\mathcal{F}^{-1}\) = inverse FFT</p>
-      <br>
-      <p class="small">Because the operation is defined in frequency space, it works on <span class="green">any input resolution</span> — enabling zero-shot super-resolution.</p>
     </div>
   </div>
+  <br>
+  <p class="small">One training run. Then apply at <span class="green">any resolution</span> — including ones never seen during training.</p>
 </section>
 
-<!-- ─── FNO ARCHITECTURE ───────────────────────────────────────── -->
+<!-- ─── 8. HOW FNO WORKS ───────────────────────────────────────────── -->
+<section>
+  <h2>How FNO Works — Step by Step</h2>
+  <p class="small"><span class="highlight">Key insight:</span> fluid dynamics is smooth at large scales — <em>big swirling patterns (low frequencies) carry most of the physics.</em></p>
+  <br>
+  <div class="step-row"><span class="step">1</span><div><strong>FFT</strong> — convert the 128×128 vorticity grid from pixel values into frequency components (how much of each swirling pattern is present)</div></div>
+  <div class="step-row"><span class="step">2</span><div><strong>Truncate</strong> — keep only the 12 lowest frequencies. Throw away the high-frequency noise. Physics-motivated compression.</div></div>
+  <div class="step-row"><span class="step">3</span><div><strong>Multiply by learned weights</strong> — each frequency mode × a trained complex number. This is where the model learns "how much to amplify each pattern."</div></div>
+  <div class="step-row"><span class="step">4</span><div><strong>Inverse FFT</strong> — convert back to a vorticity grid at the original resolution.</div></div>
+  <div class="step-row"><span class="step">5</span><div><strong>Add a local bypass</strong> — a 1×1 convolution in parallel handles fine-grained local effects.</div></div>
+  <br>
+  <div class="key-box">Frequency components have the same physical meaning at any grid size → the learned weights stay valid at <em>any</em> resolution.</div>
+</section>
+
+<!-- ─── 9. FNO ARCHITECTURE ───────────────────────────────────────── -->
 <section>
   <h2>FNO Architecture</h2>
-  <div style="text-align:center; font-size:0.85em; margin: 0.5em 0;">
+  <div style="text-align:center; font-size:0.82em; margin:0.5em 0;">
     <div style="display:flex; justify-content:center; align-items:center; gap:0.4em; flex-wrap:wrap;">
-      <div class="box" style="padding:0.5em 0.8em;">Input<br><span class="small">128×128 vorticity<br>+ grid coords</span></div>
+      <div class="box" style="padding:0.5em 0.8em;">Input<br><span class="small">128×128<br>+ grid coords</span></div>
       <span style="color:var(--accent);">→</span>
-      <div class="box" style="padding:0.5em 0.8em; border-color:var(--accent);">Lift<br><span class="small">1→64 channels<br>1×1 conv</span></div>
+      <div class="box" style="padding:0.5em 0.8em; border-color:var(--accent);">Lift<br><span class="small">1→64 ch<br>1×1 conv</span></div>
       <span style="color:var(--accent);">→</span>
-      <div class="box" style="padding:0.5em 0.8em; border-color:var(--accent2);">Fourier Layer ×4<br><span class="small">SpectralConv + bypass<br>+ GELU</span></div>
+      <div class="box" style="padding:0.5em 0.8em; border-color:var(--accent2);">Fourier Block ×4<br><span class="small">FFT → truncate →<br>weights → iFFT<br>+ bypass + GELU</span></div>
       <span style="color:var(--accent);">→</span>
       <div class="box" style="padding:0.5em 0.8em; border-color:var(--green);">Project<br><span class="small">64→128→1<br>1×1 conv</span></div>
       <span style="color:var(--accent);">→</span>
-      <div class="box" style="padding:0.5em 0.8em;">Output<br><span class="small">128×128 vorticity</span></div>
+      <div class="box" style="padding:0.5em 0.8em;">Output<br><span class="small">128×128<br>vorticity</span></div>
     </div>
   </div>
   <br>
-  <div class="two-col" style="font-size:0.82em;">
+  <div class="two-col" style="font-size:0.8em;">
     <div class="box">
-      <h3>Each Fourier Layer</h3>
-      <ul>
-        <li>FFT → truncate to 12 modes</li>
-        <li>Multiply by complex weights</li>
-        <li>Inverse FFT back to spatial</li>
-        <li>Add 1×1 bypass convolution</li>
-        <li>Apply GELU activation</li>
-      </ul>
-    </div>
-    <div class="box">
-      <h3>Our FNO config</h3>
+      <h3>Our config</h3>
       <ul>
         <li>Modes: 12 × 12</li>
         <li>Width: 64 channels</li>
-        <li>Layers: 4</li>
+        <li>Layers: 4 Fourier blocks</li>
         <li>Parameters: <span class="highlight">~4.7M</span></li>
       </ul>
+    </div>
+    <div class="box">
+      <h3>Why it's fast</h3>
+      <p class="small">Most computation happens on just 12 frequency modes — a tiny fraction of the full 128×128 grid. The FFT algorithm is also extremely efficient.</p>
     </div>
   </div>
 </section>
 
-<!-- ─── U-NET ──────────────────────────────────────────────────── -->
+<!-- ─── 10. U-NET ─────────────────────────────────────────────────── -->
 <section>
   <h2>U-Net Baseline</h2>
-  <p>A classic CNN architecture originally designed for image segmentation.<br>We use it as our <span class="highlight2">convolutional baseline</span>.</p>
+  <p>Classic CNN encoder–decoder. We use it as our <span class="highlight2">convolutional baseline</span>.</p>
+  <div class="analogy-box">
+    <strong>🔭 Think of it as:</strong> zoom out (compress the image), do some processing, then zoom back in — pasting in details at each step via skip connections.
+  </div>
   <br>
-  <div class="two-col">
+  <div class="two-col" style="font-size:0.82em;">
     <div>
       <ul>
-        <li><span class="highlight">Encoder:</span> repeatedly halve spatial size, double channels</li>
+        <li><span class="highlight">Encoder:</span> halve spatial size, double channels (×4)</li>
         <li><span class="highlight">Decoder:</span> upsample back, restoring spatial size</li>
-        <li><span class="highlight">Skip connections:</span> paste encoder features directly into decoder to preserve fine detail</li>
+        <li><span class="highlight">Skip connections:</span> paste encoder features into decoder to preserve fine detail</li>
       </ul>
       <br>
-      <p class="small">No physics-specific design —<br>it learns purely from data.</p>
+      <p class="small">No physics-specific design — learns purely from data.</p>
     </div>
     <div class="box">
       <h3>Our U-Net config</h3>
@@ -321,157 +360,240 @@
         <li>Parameters: <span class="highlight2">~31M</span></li>
       </ul>
       <br>
-      <p class="small">~6.6× more parameters than FNO</p>
+      <p class="small" style="color:var(--accent2);">6.6× more parameters than FNO</p>
+      <p class="small">Fixed 3×3 kernels → <em>tied to the training resolution</em></p>
     </div>
   </div>
 </section>
 
-<!-- ─── DATASET ────────────────────────────────────────────────── -->
+<!-- ─── 11. DATASET ───────────────────────────────────────────────── -->
 <section>
   <h2>Dataset</h2>
-  <p>neuraloperator Zenodo dataset &nbsp;<span class="small">(doi:10.5281/zenodo.12825163)</span></p>
-  <div class="three-col" style="margin-top:0.8em;">
-    <div class="box">
-      <h3>📦 Size</h3>
-      <p class="small">10,000 training samples<br>2,000 test samples<br>~1.5 GB total</p>
+  <p class="small">neuraloperator Zenodo dataset &nbsp;(doi:10.5281/zenodo.12825163) &nbsp;·&nbsp; ~1.5 GB</p>
+  <br>
+  <div class="two-col" style="align-items:center;">
+    <div>
+      <div class="three-col" style="gap:0.8em;">
+        <div class="box" style="text-align:center;">
+          <p class="small" style="margin:0;"><strong>10,000</strong><br>train pairs</p>
+        </div>
+        <div class="box" style="text-align:center;">
+          <p class="small" style="margin:0;"><strong>2,000</strong><br>test pairs</p>
+        </div>
+        <div class="box" style="text-align:center;">
+          <p class="small" style="margin:0;"><strong>128×128</strong><br>resolution</p>
+        </div>
+      </div>
+      <br>
+      <p class="small">Each pair: input \(\omega(t)\) → target \(\omega(t+1)\)<br>
+      Inputs: calm, std ≈ 0.15, range ≈ [−0.76, 0.82]<br>
+      Targets: turbulent, std ≈ 0.71, range ≈ [−3.49, 3.93]</p>
+      <div class="key-box" style="margin-top:0.6em;">
+        Targets are ~20× more variable than inputs — the model must actually learn the physics, not just copy the input.
+      </div>
     </div>
-    <div class="box">
-      <h3>🔲 Format</h3>
-      <p class="small">Each sample: 128×128 vorticity field pair (x → y)<br>x = input state<br>y = state one timestep later</p>
-    </div>
-    <div class="box">
-      <h3>⚙️ Physics</h3>
-      <p class="small">2D incompressible NS<br>Fixed viscosity ν=1e-4<br>Kolmogorov forcing</p>
+    <div>
+      <img src="../figures/sample_pairs.png" class="fig" style="width:100%;">
+      <p class="xsmall" style="text-align:center; margin-top:0.3em;">Top: input &nbsp;|&nbsp; Bottom: target. Red = clockwise, blue = counter-clockwise.</p>
     </div>
   </div>
-  <br>
-  <div class="placeholder">[figures/sample_pairs.png — show 3-4 input/target vorticity pairs]</div>
 </section>
 
-<!-- ─── TRAINING SETUP ─────────────────────────────────────────── -->
+<!-- ─── 12. TRAINING SETUP ────────────────────────────────────────── -->
 <section>
   <h2>Training Setup</h2>
   <div class="two-col">
     <div class="box">
-      <h3>Both models</h3>
+      <h3>Both models — same settings</h3>
       <ul>
-        <li>Loss: relative L2 error</li>
-        <li>Optimizer: Adam (lr=1e-3)</li>
-        <li>LR schedule: cosine decay</li>
+        <li>Loss: relative L² error</li>
+        <li>Optimizer: Adam (lr = 10⁻³)</li>
+        <li>LR schedule: cosine annealing → 10⁻⁵</li>
         <li>Epochs: 100</li>
         <li>Batch size: 20</li>
-        <li>Hardware: NVIDIA RTX 2060</li>
+        <li>Hardware: NVIDIA RTX 2060 (6 GB)</li>
       </ul>
     </div>
-    <div class="box">
-      <h3>Relative L2 error</h3>
-      <div class="equation-box">
-        \[
-          \mathcal{L} = \frac{\|\hat{u} - u\|_2}{\|u\|_2}
-        \]
+    <div>
+      <div class="box">
+        <h3>Relative L² error</h3>
+        <div class="equation-box" style="text-align:center;">
+          \[ \mathcal{L} = \frac{\|\hat{u} - u\|_2}{\|u\|_2} \]
+        </div>
+        <p class="small">1.0 = random guess &nbsp;|&nbsp; 0.1 = decent &nbsp;|&nbsp; 0.03 = great</p>
       </div>
-      <p class="small">Measures error as a <em>fraction</em> of the target's magnitude.<br>
-      Score of 1.0 = random guess.<br>
-      Score &lt; 0.1 = strong prediction.</p>
+      <br>
+      <div class="analogy-box">
+        <strong>📐 Learning rate:</strong> too large → overshoot. Too small → too slow. Cosine annealing = big strides first, tiny steps at the end — like crossing a room then threading a needle.
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ─── RESULTS PLACEHOLDER ───────────────────────────────────── -->
+<!-- ─── 13. RESULTS TABLE ─────────────────────────────────────────── -->
 <section>
   <h2>Results — Accuracy &amp; Speed</h2>
   <table>
     <tr>
-      <th>Model</th>
-      <th>Parameters</th>
-      <th>Test Rel-L2 ↓</th>
-      <th>Throughput (samp/s) ↑</th>
-      <th>Latency (ms/samp) ↓</th>
+      <th>Model</th><th>Parameters</th><th>Test Rel-L² ↓</th><th>Throughput ↑</th><th>Latency ↓</th>
     </tr>
     <tr>
       <td><span class="highlight">FNO</span></td>
       <td>4.7M</td>
-      <td>0.0348</td>
-      <td>499.2</td>
-      <td>2.003</td>
+      <td><span class="highlight">0.0348</span></td>
+      <td><span class="highlight">499 samp/s</span></td>
+      <td><span class="highlight">2.0 ms</span></td>
     </tr>
     <tr>
       <td><span class="highlight2">U-Net</span></td>
       <td>31M</td>
       <td>0.1029</td>
-      <td>227.0</td>
-      <td>4.406</td>
+      <td>227 samp/s</td>
+      <td>4.4 ms</td>
     </tr>
   </table>
   <br>
-  <div class="placeholder">[MLflow training curves — paste screenshot here]</div>
-  <br>
-  <p class="small">Run: <code>uv run python evaluate.py --model fno --checkpoint checkpoints/fno_best.pt</code></p>
+  <div class="three-col" style="font-size:0.78em; gap:0.8em;">
+    <div class="key-box" style="text-align:center; margin:0;">
+      FNO error = <strong>3.5%</strong> of target magnitude<br>U-Net = <strong>10.3%</strong><br><span class="highlight">3× more accurate</span>
+    </div>
+    <div class="key-box" style="text-align:center; margin:0;">
+      FNO: <strong>499</strong> samples/sec<br>U-Net: <strong>227</strong> samples/sec<br><span class="highlight">2.2× faster</span>
+    </div>
+    <div class="key-box" style="text-align:center; margin:0;">
+      FNO: <strong>4.7M</strong> params<br>U-Net: <strong>31M</strong> params<br><span class="highlight">6.6× smaller</span>
+    </div>
+  </div>
 </section>
 
-<!-- ─── SUPER RESOLUTION ───────────────────────────────────────── -->
+<!-- ─── 14. PREDICTIONS FIGURE ────────────────────────────────────── -->
+<section>
+  <h2>Looking at the Predictions</h2>
+  <p class="small">Six test samples spanning best → worst FNO error. Numbers = per-sample rel-L².</p>
+  <img src="../figures/predictions.png" class="fig" style="width:100%; margin-top:0.3em;">
+  <p class="xsmall" style="text-align:center; margin-top:0.4em;">
+    Row 1: Input &nbsp;|&nbsp; Row 2: FNO prediction &nbsp;|&nbsp; Row 3: U-Net prediction &nbsp;|&nbsp; Row 4: Ground truth
+  </p>
+  <div class="key-box" style="margin-top:0.5em;">
+    FNO predictions look almost identical to ground truth. U-Net captures the rough shape but blurs fine vortex structure and gets intensities slightly wrong.
+  </div>
+</section>
+
+<!-- ─── 15. ERROR MAPS ────────────────────────────────────────────── -->
+<section>
+  <h2>Where the Errors Are</h2>
+  <p class="small">Absolute error |prediction − truth|. <span style="color:#ff9944;">Bright</span> = large error. Dark = small error.</p>
+  <img src="../figures/error_maps.png" class="fig" style="width:100%; margin-top:0.3em;">
+  <p class="xsmall" style="text-align:center; margin-top:0.4em;">Top row: FNO &nbsp;|&nbsp; Bottom row: U-Net</p>
+  <div class="analogy-box" style="margin-top:0.5em;">
+    FNO: errors are small and diffuse everywhere.<br>
+    U-Net: large errors concentrated at vortex edges — exactly where the physics changes most rapidly, and where it struggles most.
+  </div>
+</section>
+
+<!-- ─── 16. ERROR HISTOGRAM ───────────────────────────────────────── -->
+<section>
+  <h2>Consistency Across All 2,000 Test Samples</h2>
+  <div class="two-col" style="align-items:center;">
+    <div>
+      <img src="../figures/error_histogram.png" class="fig" style="width:100%;">
+    </div>
+    <div>
+      <p class="small">Each bar = how many test samples fell in that error range.</p>
+      <br>
+      <div class="key-box">
+        <span class="highlight">FNO (blue)</span> — tight cluster near 0.035. Consistently good on almost every sample.
+      </div>
+      <br>
+      <div class="analogy-box">
+        <span class="highlight2">U-Net (red)</span> — wide spread, many samples with much higher error. Not only less accurate on average, but <em>unreliable</em>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 17. SUPER-RESOLUTION ──────────────────────────────────────── -->
 <section>
   <h2>Zero-Shot Super-Resolution</h2>
-  <p>Both models trained <em>only</em> on 128×128. We then test at unseen resolutions <span class="highlight">without retraining</span>.</p>
-  <br>
-  <table>
-    <tr>
-      <th>Resolution</th>
-      <th>FNO Rel-L2 ↓</th>
-      <th>U-Net Rel-L2 ↓</th>
-    </tr>
-    <tr>
-      <td>64 × 64</td>
-      <td>0.0185</td>
-      <td>0.4764</td>
-    </tr>
-    <tr>
-      <td>128 × 128 <span class="tag">train</span></td>
-      <td>0.0190</td>
-      <td>0.1029</td>
-    </tr>
-    <tr>
-      <td>256 × 256</td>
-      <td>0.0188</td>
-      <td>0.5941</td>
-    </tr>
-  </table>
-  <br>
-  <p class="small"><span class="green">FNO expected advantage:</span> Fourier modes capture frequency content independent of grid size — the model never "sees" the resolution, only the frequencies.<br>
-  <span style="color:var(--accent2);">U-Net:</span> fixed spatial kernels have no principled reason to generalise across resolutions.</p>
+  <div class="info-box" style="margin-bottom:0.6em;">
+    Both models trained <em>only</em> on 128×128. We then evaluated at 64×64 and 256×256 — <strong>no retraining</strong>. Zero examples at the new resolution.
+  </div>
+  <div class="two-col" style="align-items:center;">
+    <div>
+      <table style="font-size:0.78em;">
+        <tr><th>Resolution</th><th>FNO ↓</th><th>U-Net ↓</th></tr>
+        <tr><td>64×64</td><td><span class="highlight">0.019</span></td><td><span class="highlight2">0.476</span></td></tr>
+        <tr><td>128×128 <span class="tag">train</span></td><td><span class="highlight">0.019</span></td><td>0.103</td></tr>
+        <tr><td>256×256</td><td><span class="highlight">0.019</span></td><td><span class="highlight2">0.594</span></td></tr>
+      </table>
+      <br>
+      <div class="key-box">FNO: <span class="highlight">literally identical</span> error at all 3 resolutions. The physics doesn't change — neither does the model.</div>
+      <br>
+      <div class="analogy-box">U-Net at 256×256: error = 0.594. A <em>random guess</em> scores 1.0. U-Net is barely better than random at an unseen resolution.</div>
+    </div>
+    <div>
+      <img src="../figures/super_res.png" class="fig" style="width:100%;">
+      <p class="xsmall" style="text-align:center; margin-top:0.3em;">Cols: 64 | 128 | 256 &nbsp;·&nbsp; Rows: truth / FNO / U-Net</p>
+    </div>
+  </div>
 </section>
 
-<!-- ─── CONCLUSION ────────────────────────────────────────────────── -->
+<!-- ─── 18. WHY DID FNO WIN ───────────────────────────────────────── -->
+<section>
+  <h2>Why Did FNO Win?</h2>
+  <div class="two-col">
+    <div>
+      <h3>Inductive bias alignment</h3>
+      <p class="small">Fluid dynamics is <strong>global</strong> — a vortex on the left affects pressure everywhere, including the right.</p>
+      <p class="small">FNO sees the <strong>entire domain at once</strong> via the FFT. U-Net's 3×3 kernels see a tiny local patch at a time.</p>
+      <div class="analogy-box" style="margin-top:0.6em;">
+        🚁 FNO = helicopter view of the whole city.<br>
+        🪟 U-Net = standing on the ground, looking through a small window.<br>
+        Fluid dynamics needs the helicopter.
+      </div>
+    </div>
+    <div>
+      <h3>Resolution independence</h3>
+      <p class="small">FNO learns weights for frequency modes. A frequency like "swirl repeating 4× across the domain" means the same thing at 64×64 or 256×256.</p>
+      <div class="key-box" style="margin-top:0.6em;">U-Net's 3×3 kernel covers 3 pixels × grid-spacing. Double the resolution → the same kernel now covers <em>half</em> the physical area. Every filter has a different meaning. That's why it breaks.</div>
+      <br>
+      <h3>Parameter efficiency</h3>
+      <p class="small">FNO spends its 4.7M params on the most important frequencies. U-Net spreads 31M params across every local pixel relationship — most of them redundant for physics.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 19. CONCLUSION ────────────────────────────────────────────── -->
 <section>
   <h2>Conclusion</h2>
   <div class="two-col">
     <div>
       <h3>What we showed</h3>
       <ul>
-        <li>FNOs can learn the Navier-Stokes time-evolution operator from data</li>
-        <li>FNO achieves competitive accuracy with <span class="highlight">6× fewer parameters</span> than U-Net</li>
-        <li>FNO generalises to unseen resolutions zero-shot; U-Net degrades sharply (rel-L2 0.48–0.59 vs 0.10 at train res)</li>
+        <li>Neural networks <span class="highlight">can</span> learn to predict fluid dynamics from data</li>
+        <li>FNO: <span class="highlight">3× more accurate</span>, 6.6× smaller, 2.2× faster than U-Net</li>
+        <li>FNO error <span class="highlight">flat across all resolutions</span>; U-Net collapses at unseen sizes</li>
+        <li>Architecture that matches the problem beats a bigger generic one</li>
       </ul>
     </div>
     <div>
       <h3>Limitations</h3>
       <ul>
         <li>Single fixed viscosity — no generalisation across ν</li>
-        <li>Single-step prediction only (no rollout)</li>
-        <li>Super-res ground truth is proxy (bilinear upsample)</li>
+        <li>Single-step only — errors accumulate over rollout</li>
+        <li>Super-res ground truth is approximate (bilinear upsample)</li>
       </ul>
+      <br>
+      <h3>Broader lesson</h3>
+      <p class="small"><span class="highlight">Inductive bias</span> — baking the right physics assumptions into the architecture — can outperform raw model capacity. Especially powerful when the underlying rules are known.</p>
     </div>
-  </div>
-  <br>
-  <div class="box" style="text-align:center;">
-    <p class="small">FNOs represent a new class of model that <span class="highlight">encodes physical structure</span> (frequency content of PDEs) directly into the architecture — enabling faster, more data-efficient simulation than generic CNNs.</p>
   </div>
 </section>
 
-<!-- ─── REFERENCES ─────────────────────────────────────────────── -->
+<!-- ─── 20. REFERENCES ────────────────────────────────────────────── -->
 <section>
   <h2>References</h2>
-  <ul style="font-size:0.72em; line-height:1.8em;">
+  <ul style="font-size:0.72em; line-height:1.9em;">
     <li>Li, Z. et al. (2021). <em>Fourier Neural Operator for Parametric Partial Differential Equations.</em> ICLR 2021. <a href="https://arxiv.org/abs/2010.08895" style="color:var(--accent);">arXiv:2010.08895</a></li>
     <li>Ronneberger, O., Fischer, P., &amp; Brox, T. (2015). <em>U-Net: Convolutional Networks for Biomedical Image Segmentation.</em> MICCAI 2015.</li>
     <li>neuraloperator Zenodo dataset. doi:<a href="https://zenodo.org/records/12825163" style="color:var(--accent);">10.5281/zenodo.12825163</a></li>

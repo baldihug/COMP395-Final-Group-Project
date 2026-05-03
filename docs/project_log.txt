@@ -201,6 +201,30 @@ Key takeaways:
 
 ---
 
+## Session 10 — 2026-05-03
+
+### Presentation Overhaul
+- presentation.html fully rewritten to match the plain-English style and
+  structure of explanation.pdf. 20 slides total.
+- New slides added (not in the original presentation):
+    - "What We Did" summary with key punchline up front
+    - Vorticity explained with river/whirlpool analogy
+    - FNO step-by-step walkthrough (5 numbered steps)
+    - Predictions figure slide (predictions.png)
+    - Error maps slide (error_maps.png)
+    - Error histogram / consistency slide (error_histogram.png)
+    - "Why Did FNO Win?" with helicopter vs window analogy
+- All placeholder image tags replaced with actual figures from figures/:
+    - sample_pairs.png on the dataset slide
+    - predictions.png, error_maps.png, error_histogram.png, super_res.png
+      each get their own dedicated slide
+- Three callout box styles added (analogy = orange, key point = green,
+  info = blue) matching explanation.pdf callout boxes
+- MLflow training curve placeholder removed
+- Navier-Stokes equation annotated with underbrace labels for each term
+
+---
+
 ## Session 9 — 2026-05-03
 
 ### Figure Layout Overhaul + Appendix
