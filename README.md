@@ -90,8 +90,10 @@ uv run python evaluate.py --model unet --checkpoint checkpoints/unet_best.pt --s
 # Regenerate result figures
 uv run python visualize_results.py
 
-# Compile reports (from docs/)
-cd docs && pdflatex report.tex && pdflatex report.tex && pdflatex report.tex
+# Compile reports (ACM format — bibtex pass required)
+cd docs
+pdflatex report.tex && bibtex report && pdflatex report.tex && pdflatex report.tex
+pdflatex explanation.tex && pdflatex explanation.tex && pdflatex explanation.tex
 ```
 
 ## Results

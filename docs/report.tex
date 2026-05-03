@@ -1,28 +1,33 @@
-\documentclass[11pt,twocolumn]{article}
-\usepackage[margin=1in]{geometry}
-\usepackage{amsmath,amssymb}
+\documentclass[sigconf,nonacm]{acmart}
+\settopmatter{printacmref=false}
+\setcopyright{none}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+
 \usepackage{graphicx}
 \graphicspath{{../figures/}}
 \usepackage{booktabs}
-\usepackage{hyperref}
-\usepackage{float}
-\usepackage{microtype}
-\usepackage[numbers]{natbib}
 
-\title{\textbf{Fourier Neural Operators for 2D Navier--Stokes:\\
-       A Comparison with U-Net}}
+% ─── METADATA ────────────────────────────────────────────────────────────────
+\title{Fourier Neural Operators for 2D Navier--Stokes: A Comparison with U-Net}
 
-\author{
-  Ian Havill \and Hugh Baldwin \and Aaron Chen\\
-  Occidental College\\
-  COMP 395 --- Deep Learning
-}
+\author{Ian Havill}
+\affiliation{\institution{Occidental College}\city{Los Angeles}\state{CA}\country{USA}}
+\email{havill@oxy.edu}
+
+\author{Hugh Baldwin}
+\affiliation{\institution{Occidental College}\city{Los Angeles}\state{CA}\country{USA}}
+
+\author{Aaron Chen}
+\affiliation{\institution{Occidental College}\city{Los Angeles}\state{CA}\country{USA}}
+
 \date{May 2026}
 
-\begin{document}
-\maketitle
+\keywords{neural operators, Fourier Neural Operator, Navier--Stokes, fluid dynamics,
+          surrogate modelling, super-resolution}
 
-% ─── ABSTRACT ────────────────────────────────────────────────────────────────
+% ─── DOCUMENT ────────────────────────────────────────────────────────────────
+\begin{document}
+
 \begin{abstract}
 We compare the Fourier Neural Operator (FNO) \cite{li2021fno} against a standard
 U-Net \cite{ronneberger2015unet} on the task of predicting the one-step time
@@ -41,6 +46,8 @@ These results illustrate how architectures that encode physical structure in the
 frequency domain can outperform generic convolutional baselines on PDE surrogate
 tasks.
 \end{abstract}
+
+\maketitle
 
 % ─── INTRODUCTION ────────────────────────────────────────────────────────────
 \section{Introduction}
@@ -147,7 +154,7 @@ The per-sample standard deviations are nearly linearly correlated, confirming
 the dataset is internally consistent.
 Figure~\ref{fig:sample_pairs} shows representative input--target pairs.
 
-\begin{figure}[H]
+\begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{sample_pairs.png}
   \caption{Five input--target vorticity pairs from the training set.
@@ -210,11 +217,11 @@ latency for both models.
 FNO achieves roughly $3\times$ lower error than U-Net while using $6.6\times$
 fewer parameters and running $2.2\times$ faster.
 
-\begin{table}[H]
+\begin{table}[t]
   \centering
   \caption{Standard evaluation on the 128$\times$128 test set.}
   \label{tab:standard}
-  \begin{tabular}{lrrrrr}
+  \begin{tabular}{lrrrr}
     \toprule
     Model  & Params & Rel-$L^2$$\downarrow$ & Throughput$\uparrow$ & Latency$\downarrow$ \\
            &        &                        & (samp/s)              & (ms/samp) \\
@@ -264,7 +271,7 @@ across the full 2{,}000-sample test set.
 FNO's distribution is narrow and concentrated near 0.035; U-Net's is broad and
 shifted to the right, indicating consistently higher error with more variability.
 
-\begin{figure}[H]
+\begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{error_histogram.png}
   \caption{Distribution of per-sample relative $L^2$ error over the full test
@@ -282,7 +289,7 @@ models---trained only at 128$\times$128---are evaluated at 64$\times$64 and
 Ground truth at each resolution is obtained by bilinearly resampling the 128
 test targets.
 
-\begin{table}[H]
+\begin{table}[t]
   \centering
   \caption{Zero-shot super-resolution: relative $L^2$ at unseen resolutions.}
   \label{tab:superres}
@@ -373,28 +380,7 @@ The FNO framework represents a principled step toward fast, data-efficient neura
 simulators that can generalize across discretizations.
 
 % ─── REFERENCES ──────────────────────────────────────────────────────────────
-\bibliographystyle{plainnat}
-\begin{thebibliography}{9}
-
-\bibitem{li2021fno}
-Li, Z., Kovachki, N., Azizzadenesheli, K., Liu, B., Bhattacharya, K., Stuart, A.,
-  \& Anandkumar, A. (2021).
-\newblock Fourier Neural Operator for Parametric Partial Differential Equations.
-\newblock \emph{International Conference on Learning Representations (ICLR)}.
-\newblock \href{https://arxiv.org/abs/2010.08895}{arXiv:2010.08895}.
-
-\bibitem{ronneberger2015unet}
-Ronneberger, O., Fischer, P., \& Brox, T. (2015).
-\newblock U-Net: Convolutional Networks for Biomedical Image Segmentation.
-\newblock \emph{Medical Image Computing and Computer-Assisted Intervention
-  (MICCAI)}, pp.\ 234--241.
-
-\bibitem{zenodo2024}
-neuraloperator. (2024).
-\newblock NS Forcing Dataset 128.
-\newblock Zenodo.
-\newblock \href{https://doi.org/10.5281/zenodo.12825163}{doi:10.5281/zenodo.12825163}.
-
-\end{thebibliography}
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{refs}
 
 \end{document}

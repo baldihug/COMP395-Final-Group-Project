@@ -201,6 +201,32 @@ Key takeaways:
 
 ---
 
+## Session 7 — 2026-05-03
+
+### Converted to ACM LaTeX Format
+- report.tex: converted from article class to \documentclass[sigconf,nonacm]{acmart}
+  (ACM two-column conference format). Changes:
+    - Removed: geometry, microtype, natbib, hyperref (all included in acmart)
+    - Added: \settopmatter{printacmref=false}, \setcopyright{none} to suppress
+      ACM boilerplate since this is a course project
+    - Author block updated to ACM format (\author, \affiliation, \email per author)
+    - Added \keywords{}
+    - Abstract now placed before \maketitle per acmart convention
+    - [H] float specifiers replaced with [t] (acmart handles its own floats)
+    - Bibliography switched from plainnat/thebibliography to
+      ACM-Reference-Format + \bibliography{refs}
+- explanation.tex: converted to \documentclass[acmsmall,nonacm]{acmart}
+  (ACM single-column format — better for callout boxes and glossary)
+  Same structural changes as above; figure* changed to figure throughout
+  since acmsmall is single-column
+- docs/refs.bib: new BibTeX file with all three references (Li et al. 2021,
+  Ronneberger et al. 2015, Zenodo dataset)
+- Compiled: report.pdf (5 pages, 4.8 MB), explanation.pdf (11 pages, 4.9 MB)
+- To recompile: cd docs && pdflatex report.tex && bibtex report &&
+  pdflatex report.tex && pdflatex report.tex  (bibtex pass needed for ACM refs)
+
+---
+
 ## Session 6 — 2026-05-03
 
 ### Repo Cleanup and Reorganization
