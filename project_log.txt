@@ -165,6 +165,40 @@ Key takeaways:
 
 ---
 
+## Session 5 — 2026-05-03
+
+### Report Compilation
+- report.tex compiled to report.pdf using pdflatex (3 passes to resolve all
+  cross-references and figure/table numbers). Output: 5 pages, ~2.7 MB.
+  No errors; all figures, tables, and citations resolved cleanly.
+
+### Plain-English Companion Report
+- explanation.tex: a plain-language companion to the technical report, written
+  for our own understanding. Same two-column article format, 8 pages.
+  Compiled to explanation.pdf (also 3 pdflatex passes, no errors).
+  Contents:
+  - Every technical concept explained in plain English before any math appears
+  - Coloured callout boxes: blue (context/info), orange (analogies), green
+    (key points)
+  - Orange analogy boxes throughout — helicopter vs. ground view for FNO/UNet,
+    learning rate as threading a needle, neural operator as a formula vs.
+    a fixed calculator, etc.
+  - All four result figures included with plain-English captions describing
+    exactly what you are looking at visually
+  - Error numbers explained explicitly (e.g. "0.035 means the mistake is 3.5%
+    the size of the true answer")
+  - Full glossary at the end covering every technical term: vorticity, PDE,
+    FFT, viscosity, Reynolds number, neural operator, FNO, U-Net, relative L2,
+    zero-shot super-resolution, parameters, epoch, learning rate, cosine
+    annealing, inductive bias
+
+### What Still Needs to Be Done
+- [ ] Polish and finalize report.tex (add group member names, proofread)
+- [ ] Add MLflow training loss curve screenshots to figures/ and presentation
+- [ ] Final presentation review
+
+---
+
 ## Session 4 — 2026-05-03
 
 ### Cleanup
