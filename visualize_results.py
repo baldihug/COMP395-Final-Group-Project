@@ -25,6 +25,14 @@ from models import FNO2d, UNet
 
 os.makedirs('figures', exist_ok=True)
 
+plt.rcParams.update({
+    'font.size': 16,
+    'axes.titlesize': 16,
+    'axes.labelsize': 16,
+    'legend.fontsize': 15,
+    'figure.titlesize': 18,
+})
+
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using device: {DEVICE}")
 
@@ -72,9 +80,9 @@ sample_idx = [sorted_idx[int(i * (len(sorted_idx) - 1) / 5)] for i in range(6)]
 # ── Figure 1: predictions grid ────────────────────────────────────────────────
 
 N = len(sample_idx)
-fig, axes = plt.subplots(4, N, figsize=(3 * N, 13))
-fig.suptitle('FNO vs U-Net Predictions on Navier–Stokes Test Set', fontsize=14, y=1.01)
-row_labels = ['Input  ω(t)', 'FNO  pred', 'U-Net pred', 'Ground truth  ω(t+1)']
+fig, axes = plt.subplots(4, N, figsize=(2.2 * N, 10))
+fig.suptitle('FNO vs U-Net Predictions on Navier–Stokes Test Set', y=1.01)
+row_labels = ['Input  ω(t)', 'FNO pred', 'U-Net pred', 'Ground truth  ω(t+1)']
 
 for col, idx in enumerate(sample_idx):
     x  = x_all[idx].cpu().numpy()
@@ -90,11 +98,11 @@ for col, idx in enumerate(sample_idx):
         im = ax.imshow(data, cmap='RdBu_r', vmin=vmin, vmax=vmax, origin='lower')
         ax.set_xticks([]); ax.set_yticks([])
         if col == 0:
-            ax.set_ylabel(label, fontsize=10)
+            ax.set_ylabel(label, fontsize=15, labelpad=4)
         if row == 1:
-            ax.set_title(f'FNO L2={fno_errs[idx]:.3f}', fontsize=9)
+            ax.set_title(f'FNO={fno_errs[idx]:.3f}', fontsize=14)
         if row == 2:
-            ax.set_title(f'UNet L2={unet_errs[idx]:.3f}', fontsize=9)
+            ax.set_title(f'UNet={unet_errs[idx]:.3f}', fontsize=14)
 
 fig.tight_layout()
 fig.savefig('figures/predictions.png', dpi=150, bbox_inches='tight')
@@ -103,8 +111,8 @@ print("Saved figures/predictions.png")
 
 # ── Figure 2: absolute error maps ─────────────────────────────────────────────
 
-fig, axes = plt.subplots(2, N, figsize=(3 * N, 7))
-fig.suptitle('Absolute Prediction Error  |pred − truth|', fontsize=13, y=1.01)
+fig, axes = plt.subplots(2, N, figsize=(2.2 * N, 5))
+fig.suptitle('Absolute Prediction Error  |pred − truth|', y=1.01)
 
 for col, idx in enumerate(sample_idx):
     y  = y_all[idx].cpu().numpy()
@@ -120,9 +128,9 @@ for col, idx in enumerate(sample_idx):
         im = ax.imshow(emap, cmap='hot', vmin=0, vmax=vmax, origin='lower')
         ax.set_xticks([]); ax.set_yticks([])
         if col == 0:
-            ax.set_ylabel(label, fontsize=11)
+            ax.set_ylabel(label, fontsize=15, labelpad=4)
         if row == 0:
-            ax.set_title(f'Sample {idx}', fontsize=9)
+            ax.set_title(f'Sample {idx}', fontsize=14)
 
 fig.tight_layout()
 fig.savefig('figures/error_maps.png', dpi=150, bbox_inches='tight')
@@ -138,7 +146,7 @@ y_s = y_all[[med_idx]].to(DEVICE)
 
 resolutions = [64, 128, 256]
 fig, axes = plt.subplots(3, len(resolutions), figsize=(4 * len(resolutions), 10))
-fig.suptitle('Zero-Shot Super-Resolution: FNO vs U-Net (trained only at 128×128)', fontsize=12)
+fig.suptitle('Zero-Shot Super-Resolution: FNO vs U-Net (trained only at 128×128)')
 
 for col, res in enumerate(resolutions):
     xr = F.interpolate(x_s.unsqueeze(1), size=(res, res), mode='bilinear',
@@ -164,10 +172,10 @@ for col, res in enumerate(resolutions):
         ax.imshow(data, cmap='RdBu_r', vmin=vmin, vmax=vmax, origin='lower')
         ax.set_xticks([]); ax.set_yticks([])
         if col == 0:
-            ax.set_ylabel(label, fontsize=10)
+            ax.set_ylabel(label, fontsize=15, labelpad=4)
         if row == 0:
-            tag = ' ← train res' if res == 128 else ''
-            ax.set_title(f'{res}×{res}{tag}', fontsize=10)
+            tag = ' (train res)' if res == 128 else ''
+            ax.set_title(f'{res}×{res}{tag}', fontsize=15)
 
 fig.tight_layout()
 fig.savefig('figures/super_res.png', dpi=150, bbox_inches='tight')
@@ -182,10 +190,10 @@ ax.hist(fno_errs,  bins=bins, alpha=0.7, label=f'FNO  (mean={fno_errs.mean():.4f
 ax.hist(unet_errs, bins=bins, alpha=0.7, label=f'U-Net (mean={unet_errs.mean():.4f})', color='tomato')
 ax.axvline(fno_errs.mean(),  color='steelblue', linestyle='--', linewidth=1.5)
 ax.axvline(unet_errs.mean(), color='tomato',    linestyle='--', linewidth=1.5)
-ax.set_xlabel('Per-sample relative L2 error', fontsize=12)
-ax.set_ylabel('Count', fontsize=12)
-ax.set_title('Error Distribution on Full Test Set', fontsize=13)
-ax.legend(fontsize=11)
+ax.set_xlabel('Per-sample relative L2 error')
+ax.set_ylabel('Count')
+ax.set_title('Error Distribution on Full Test Set')
+ax.legend()
 fig.tight_layout()
 fig.savefig('figures/error_histogram.png', dpi=150, bbox_inches='tight')
 plt.close()
