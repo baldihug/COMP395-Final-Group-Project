@@ -201,6 +201,28 @@ Key takeaways:
 
 ---
 
+## Session 11 — 2026-05-03
+
+### Beamer Presentation
+- docs/presentation.tex: new Beamer presentation (Madrid/beaver theme, 16:9,
+  17 slides). Compiled to docs/presentation.pdf.
+- Hits all professor checklist items:
+    - Math: NS equations, integral operator derivation, Fourier layer formula,
+      relative L2 loss, Kaiming/spectral weight initialisation formulas
+    - Data: tensor pipeline explained (augment with grid coords, batching,
+      input/output shapes), dataset statistics table
+    - Network output: regression vs classification explained, physical meaning
+    - FNO architecture: lift → 4 Fourier blocks → project, config table
+    - Loss function: relative L2 with formula and motivation vs MSE
+    - Weight init: FNO complex weights (scaled uniform), Conv2d (Kaiming),
+      BatchNorm (γ=1, β=0)
+    - Comparison model: U-Net architecture with key limitation explained
+- All 4 result figures embedded (predictions, error maps, super-res, sample pairs)
+- Content carefully limited per slide to prevent overflow
+- To compile: cd docs && pdflatex presentation.tex && pdflatex presentation.tex
+
+---
+
 ## Session 10 — 2026-05-03
 
 ### Presentation Overhaul
