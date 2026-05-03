@@ -55,9 +55,11 @@ relative L2 error and inference speed.
 
 ## Resuming This Project (give this file to Claude)
 1. Open terminal in: ~/Deep Learning Projects/COMP395-Final-Group-Project
-2. Run: git checkout ianh
+2. Run: git checkout main
 3. If environment not set up: ~/.local/bin/uv sync
 4. Pick up from Next Steps below
+
+Note: this file lives at docs/project_log.txt (moved from root in Session 6)
 
 ---
 
@@ -196,6 +198,34 @@ Key takeaways:
 - [ ] Polish and finalize report.tex (add group member names, proofread)
 - [ ] Add MLflow training loss curve screenshots to figures/ and presentation
 - [ ] Final presentation review
+
+---
+
+## Session 6 — 2026-05-03
+
+### Repo Cleanup and Reorganization
+- Created docs/ folder and moved all documents into it:
+    - docs/report.tex, docs/report.pdf
+    - docs/explanation.tex, docs/explanation.pdf
+    - docs/presentation.html
+    - docs/project_log.txt  ← this file
+    - docs/COMP 395 Final - Latex Report Draft.pdf
+    - docs/CS_395_2_Deep_Learning_Final_Project (3).pdf
+- Deleted empty "New folder" from project root
+- Added LaTeX build artifacts (*.aux, *.log, *.out, etc.) to .gitignore
+- Python source files (train.py, evaluate.py, dataset.py, etc.) stay at
+  project root — moving them would break relative imports
+
+### Figure Readability Fix
+- visualize_results.py: set global matplotlib font size to 16pt, reduced
+  individual subplot panel sizes so figures need less scaling in the PDF
+- Multi-panel figures (predictions.png, error_maps.png, super_res.png)
+  switched from single-column figure to figure* (full page width) in both
+  report.tex and explanation.tex — this was the main readability fix
+- error_histogram.png stays single-column (simple enough to read as-is)
+- Recompiled: report.pdf (7 pages, 2.7 MB), explanation.pdf (11 pages, 4.4 MB)
+- Fixed \graphicspath to ../figures/ in both .tex files after the docs/ move
+- To recompile: cd docs && pdflatex report.tex (run 3 times for references)
 
 ---
 
